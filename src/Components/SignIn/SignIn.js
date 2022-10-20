@@ -29,6 +29,7 @@ export default function SignIn() {
     });
     promise.then((res) => {
       localStorage.setItem("linkr", JSON.stringify({ token: res.data.token }));
+Navigate('/timeline');
     });
   }
 
