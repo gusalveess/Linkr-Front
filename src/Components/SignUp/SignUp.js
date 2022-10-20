@@ -35,7 +35,7 @@ export default function SignUp() {
 				type: "alert",
 				message: {
 					type: "error",
-					text: error.response.data,
+					text: error.response?.data || "Houve um erro ao cadastrar.",
 				},
 			});
 
