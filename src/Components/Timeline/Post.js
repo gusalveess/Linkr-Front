@@ -2,7 +2,6 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 export default function Post({ post, update, setUpdate }) {
 	const [linkData, setLinkData] = useState({});
@@ -24,23 +23,21 @@ export default function Post({ post, update, setUpdate }) {
 
 				<textarea defaultValue={post.description} />
 
-				<Link to={post.url}>
-					{linkData.title ? (
-						<Snippet>
+				{linkData.title ? (
+					<Snippet onClick={() => window.open(post.url)} >
+						<div>
 							<div>
-								<div>
-									<h2>{linkData.title}</h2>
-									<p>{linkData.description}</p>
-								</div>
-								<span>{linkData.url}</span>
+								<h2>{linkData.title}</h2>
+								<p>{linkData.description}</p>
 							</div>
+							<span>{linkData.url}</span>
+						</div>
 
-							<img src={linkData.image?.url} alt={linkData.title} />
-						</Snippet>
-					) : (
-						""
-					)}
-				</Link>
+						<img src={linkData.image?.url} alt={linkData.title} />
+					</Snippet>
+				) : (
+					""
+				)}
 			</PostData>
 		</Wrapper>
 	);
@@ -98,11 +95,6 @@ const PostData = styled.div`
 			font-size: 17px;
 			color: #b7b7b7;
 		}
-
-		a {
-			height: 155px;
-			width: 500px;
-		}
 	}
 `;
 
@@ -111,6 +103,7 @@ const Snippet = styled.div`
 		width: 100%;
 		height: 155px;
 		display: flex;
+		cursor: pointer;
 
 		div {
 			width: 100%;
@@ -144,13 +137,13 @@ const Snippet = styled.div`
 			object-fit: fill;
 			border-radius: 0 11px 11px 0;
 			border: 1px solid #4d4d4d;
+		}
 
-			& > div {
-				border: 1px solid #4d4d4d;
-				border-right-width: 0;
-				padding: 20px;
-				justify-content: space-between;
-			}
+		& > div {
+			border: 1px solid #4d4d4d;
+			border-right-width: 0;
+			padding: 20px;
+			justify-content: space-between;
 		}
 	}
 `;
