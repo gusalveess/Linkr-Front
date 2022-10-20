@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
 
 export default function SignUp() {
@@ -11,6 +12,9 @@ export default function SignUp() {
 	const [picture, setPicture] = useState("");
 	const [signUp, setSignUp] = useState("Sign Up");
 	const [disable, setDisable] = useState(false);
+
+	const { setMessage } = useMessage();
+
 	const Navigate = useNavigate();
 
 	function Post() {
@@ -27,13 +31,27 @@ export default function SignUp() {
 		const promise = service.signUp(body);
 
 		promise.catch((error) => {
-			alert(error.response.data);
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: error.response?.data || "Houve um erro ao cadastrar.",
+				},
+			});
+
 			setDisable(false);
 			setSignUp("Sign Up");
 		});
 
-		promise.then((res) => {
-			alert("Usuário Cadastrado!");
+		promise.then(() => {
+			setMessage({
+				type: "alert",
+				message: {
+					type: "success",
+					text: "Usuário Cadastrado!",
+				},
+			});
+
 			Navigate("/");
 		});
 	}

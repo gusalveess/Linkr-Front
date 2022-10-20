@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
 
 export default function SignIn() {
@@ -9,6 +10,9 @@ export default function SignIn() {
 	const [logIn, setLogIn] = useState("Log In");
 	const [password, setPassword] = useState("");
 	const [disable, setDisable] = useState(false);
+
+	const { setMessage } = useMessage();
+
 	const Navigate = useNavigate();
 
 	function Post() {
@@ -25,7 +29,13 @@ export default function SignIn() {
 
 		promise.catch((error) => {
 			if (error.response) {
-				alert(error.response.data);
+				setMessage({
+					type: "alert",
+					message: {
+						type: "error",
+						text: error.response.data,
+					},
+				});
 			}
 			setDisable(false);
 			setLogIn("Log In");
