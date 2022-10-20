@@ -46,7 +46,7 @@ export default function CreatePost({ update, setUpdate }) {
 			<div>
 				<img src={user.userImage} href="user" />
 			</div>
-      
+
 			<Form onSubmit={handleForm}>
 				<h2>What are you going to share today?</h2>
 
@@ -84,7 +84,6 @@ const Container = styled.div`
 	width: 100%;
 	height: auto;
 	display: flex;
-	flex-direction: column;
 	flex-direction: row;
 	color: #ffffff;
 	background-color: #ffffff;
