@@ -137,6 +137,7 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     font-size: 17px;
     font-weight: 400;
+	background-color: #333333;
   }
 
   * {
