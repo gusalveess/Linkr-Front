@@ -3,25 +3,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import { useMessage } from "../../Contexts/messageContext";
-import axios from "axios";
+import * as service from "../../Services/linkr";
 
 export default function SignIn() {
 	const [email, setEmail] = useState("");
 	const [logIn, setLogIn] = useState("Log In");
 	const [password, setPassword] = useState("");
 	const [disable, setDisable] = useState(false);
+
 	const { setMessage } = useMessage();
+
 	const Navigate = useNavigate();
 
 	function Post() {
-		const URL = "http://localhost:4000/signIn";
 		const body = {
 			email: email,
 			password: password,
 		};
+
 		setDisable(true);
+
 		setLogIn(<ThreeDots color="#FFFFFF" height={13} width={51} />);
-		const promise = axios.post(URL, body);
+
+		const promise = service.signIn(body);
+
 		promise.catch((error) => {
 			if (error.response) {
 				setMessage({
@@ -35,6 +40,7 @@ export default function SignIn() {
 			setDisable(false);
 			setLogIn("Log In");
 		});
+
 		promise.then((res) => {
 			localStorage.setItem("linkr", JSON.stringify({ token: res.data.token }));
 		});

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import { useMessage } from "../../Contexts/messageContext";
-import axios from "axios";
+import * as service from "../../Services/linkr";
 
 export default function SignUp() {
 	const [email, setEmail] = useState("");
@@ -12,20 +12,24 @@ export default function SignUp() {
 	const [picture, setPicture] = useState("");
 	const [signUp, setSignUp] = useState("Sign Up");
 	const [disable, setDisable] = useState(false);
+
 	const { setMessage } = useMessage();
+
 	const Navigate = useNavigate();
 
 	function Post() {
-		const URL = "http://localhost:4000/signUp";
 		const body = {
 			email: email,
 			password: password,
 			username: username,
 			picture: picture,
 		};
+
 		setDisable(true);
 		setSignUp(<ThreeDots color="#FFFFFF" height={13} width={51} />);
-		const promise = axios.post(URL, body);
+
+		const promise = service.signUp(body);
+
 		promise.catch((error) => {
 			setMessage({
 				type: "alert",
@@ -34,9 +38,11 @@ export default function SignUp() {
 					text: error.response.data,
 				},
 			});
+
 			setDisable(false);
 			setSignUp("Sign Up");
 		});
+
 		promise.then(() => {
 			setMessage({
 				type: "alert",
