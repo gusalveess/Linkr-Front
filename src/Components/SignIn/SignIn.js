@@ -42,7 +42,12 @@ export default function SignIn() {
 		});
 
 		promise.then((res) => {
-			localStorage.setItem("linkr", JSON.stringify({ token: res.data.token }));
+			localStorage.setItem(
+				"linkr",
+				JSON.stringify({ token: res.data.token, userImage: res.data.userImage })
+			);
+
+			Navigate("/timeline");
 		});
 	}
 
