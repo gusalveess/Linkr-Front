@@ -34,4 +34,20 @@ function createPost(body) {
 	return promise;
 }
 
-export { signIn, signUp, createPost };
+function listPosts() {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/posts`, config);
+
+	return promise;
+}
+
+function deletePost(id) {
+	const config = createHeaders();
+
+	const promise = axios.delete(`${API_URL}/posts/${id}`, config);
+
+	return promise;
+}
+
+export { signIn, signUp, createPost, listPosts, deletePost };
