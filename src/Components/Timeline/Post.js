@@ -2,12 +2,15 @@ import styled from "styled-components";
 import axios from "axios";
 import Modal from "react-modal";
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { ThreeDots as Loading } from "react-loader-spinner";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
+
+import ReactHashtag from "@mdnm/react-hashtag";
 
 Modal.setAppElement(".root");
 
@@ -133,13 +136,27 @@ export default function Post({ post, update, setUpdate }) {
 						</div>
 					</div>
 
-					<textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						ref={editRef}
-						onKeyPress={onKeyPress}
-						disabled={disabled}
-					/>
+					{disabled ? (
+						<p>
+							<ReactHashtag
+								renderHashtag={(hashtagValue) => (
+									<Link to={`/hashtag/${hashtagValue.slice(1)}`}>
+										{hashtagValue}
+									</Link>
+								)}
+							>
+								{description}
+							</ReactHashtag>
+						</p>
+					) : (
+						<textarea
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+							ref={editRef}
+							onKeyPress={onKeyPress}
+							disabled={disabled}
+						/>
+					)}
 
 					{linkData.title ? (
 						<Snippet onClick={() => window.open(post.url)}>
@@ -194,6 +211,11 @@ const Wrapper = styled.div`
 		}
 	}
 
+	a {
+		color: #ffffff;
+		font-weight: 700;
+	}
+
 	@media (max-width: 611px) {
 		border-radius: 0;
 	}
@@ -212,14 +234,24 @@ const PostData = styled.div`
 			background-color: #ffffff;
 			border: none;
 			resize: none;
+			font-family: "Lato", sans-serif;
 			font-size: 17px;
 			color: #4c4c4c;
 			margin: 7px 0 3px;
+			padding: 3px 8px;
 		}
 
 		textarea:disabled {
 			background-color: transparent;
 			color: #b7b7b7;
+		}
+
+		& > p {
+			width: 100%;
+			height: auto;
+			font-size: 17px;
+			color: #b7b7b7;
+			margin: 3px 0 10px;
 		}
 	}
 
