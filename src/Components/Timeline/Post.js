@@ -31,6 +31,10 @@ export default function Post({ post, update, setUpdate }) {
 		promise.then(({ data }) => setLinkData(data.data));
 	}, [post.url]);
 
+	useEffect(() => {
+		setDescription(post.description)
+	}, [post.description]);
+
 	function deletePostFunction() {
 		setIsLoading(true);
 
@@ -59,7 +63,17 @@ export default function Post({ post, update, setUpdate }) {
 	function editPost() {
 		setDisabled(true);
 
-		const promise = service.editPost({ id: post.id, body: { description } });
+  const descriptionArray = description.split(" ");
+const tags = [];
+
+    descriptionArray.forEach((word) => {
+      if (word[0] === "#") {
+        tags.push(word.slice(1).toLowerCase());
+      }
+    });
+
+
+		const promise = service.editPost({ id: post.id, body: { description, tags } });
 
 		promise.catch(() => {
 			setMessage({
@@ -71,6 +85,10 @@ export default function Post({ post, update, setUpdate }) {
 			});
 
 			setDisabled(false);
+		});
+
+		promise.then(() => {
+setUpdate(!update);
 		});
 	}
 
@@ -141,7 +159,7 @@ export default function Post({ post, update, setUpdate }) {
 							<ReactHashtag
 								renderHashtag={(hashtagValue) => (
 									<Link to={`/hashtag/${hashtagValue.slice(1)}`}>
-										{hashtagValue}
+										{hashtagValue?.toLowerCase()}
 									</Link>
 								)}
 							>

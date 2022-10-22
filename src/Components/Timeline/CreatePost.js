@@ -15,7 +15,16 @@ export default function CreatePost({ update, setUpdate }) {
 
 		if (!form.description) {
 			delete form.description;
-		}
+		} else {
+
+  const descriptionArray = form.description.split(" ");
+
+    descriptionArray.forEach((word) => {
+      if (word[0] === "#") {
+        form.tags.push(word.slice(1).toLowerCase());
+      }
+    });
+}
 
 		setDisabled(true);
 
