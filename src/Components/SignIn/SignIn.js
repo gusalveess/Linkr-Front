@@ -7,7 +7,6 @@ import * as service from "../../Services/linkr";
 
 export default function SignIn() {
 	const [email, setEmail] = useState("");
-	const [logIn, setLogIn] = useState("Log In");
 	const [password, setPassword] = useState("");
 	const [disable, setDisable] = useState(false);
 
@@ -23,8 +22,6 @@ export default function SignIn() {
 
 		setDisable(true);
 
-		setLogIn(<ThreeDots color="#FFFFFF" height={13} width={51} />);
-
 		const promise = service.signIn(body);
 
 		promise.catch((error) => {
@@ -38,11 +35,13 @@ export default function SignIn() {
 				});
 			}
 			setDisable(false);
-			setLogIn("Log In");
 		});
 
 		promise.then((res) => {
-			localStorage.setItem("linkr", JSON.stringify({ token: res.data.token }));
+			localStorage.setItem(
+				"linkr",
+				JSON.stringify({ token: res.data.token, userImage: res.data.userImage })
+			);
 
 			Navigate("/timeline");
 		});
@@ -82,7 +81,13 @@ export default function SignIn() {
 							required
 						/>
 
-						<button>{logIn}</button>
+						<button disabled={disable}>
+							{disable ? (
+								<ThreeDots color="#FFFFFF" height={13} width={51} />
+							) : (
+								"Log In"
+							)}
+						</button>
 					</form>
 
 					<p onClick={() => Navigate("/sign-up")}>
@@ -182,6 +187,15 @@ const MainTwo = styled.div`
 		font-size: 23px;
 		color: #fff;
 		cursor: pointer;
+	}
+
+	button:hover {
+		filter: brightness(0.8);
+	}
+
+	button:disabled {
+		filter: brightness(0.7);
+		cursor: initial;
 	}
 
 	p {
