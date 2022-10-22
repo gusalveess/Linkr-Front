@@ -1,24 +1,14 @@
 import styled from "styled-components";
-import axios from "axios";
 import { useState, useEffect } from "react";
+import * as service from "../../Services/linkr";
 
 import Post from "./Post";
 
 export default function Posts({ update, setUpdate }) {
 	const [posts, setPosts] = useState(false);
 
-	let user = JSON.parse(localStorage.getItem("linkr"));
-
 	useEffect(() => {
-		const URL = "http://localhost:4000/posts";
-
-		const config = {
-			headers: {
-				Authorization: `Bearer ${user.token}`,
-			},
-		};
-
-		const promise = axios.get(URL, config);
+		const promise = service.listPosts();
 
 		promise.catch(() => {
 			alert(

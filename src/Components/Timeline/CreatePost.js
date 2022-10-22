@@ -1,39 +1,42 @@
 import styled from "styled-components";
-import axios from "axios";
 import { useState } from "react";
+import * as service from "../../Services/linkr";
+import { useMessage } from "../../Contexts/messageContext";
 
 export default function CreatePost({ update, setUpdate }) {
 	const [form, setForm] = useState({ url: "", description: "", tags: [] });
 	const [disabled, setDisabled] = useState(false);
+	const { setMessage } = useMessage();
 
 	let user = JSON.parse(localStorage.getItem("linkr"));
 
 	function handleForm(event) {
 		event.preventDefault();
 
-		const URL = "http://localhost:4000/posts";
-
-		const config = {
-			headers: {
-				Authorization: `Bearer ${user.token}`,
-			},
-		};
-
 		if (!form.description) {
 			delete form.description;
 		}
 
 		setDisabled(true);
-		const promise = axios.post(URL, form, config);
+
+		const promise = service.createPost(form);
 
 		promise.catch(() => {
-			alert("Houve um erro ao publicar seu link");
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Houve um erro ao publicar seu link.",
+				},
+			});
+
 			setDisabled(false);
 		});
 
 		promise.then(() => {
 			setForm({ url: "", description: "", tags: [] });
 			setDisabled(false);
+			setUpdate(!update);
 		});
 	}
 
@@ -44,7 +47,7 @@ export default function CreatePost({ update, setUpdate }) {
 	return (
 		<Container>
 			<div>
-				<img src={user.userImage} href="user" />
+				<img src={user.userImage} alt="user" />
 			</div>
 
 			<Form onSubmit={handleForm}>
