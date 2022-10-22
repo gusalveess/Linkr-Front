@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import CreatePost from "./CreatePost";
 import Posts from "./Posts";
+import Hashtags from "./Hashtags";
 
 export default function Timeline() {
 	const [update, setUpdate] = useState(false);
@@ -12,15 +13,20 @@ export default function Timeline() {
 		<Main>
 			<h1>timeline</h1>
 
-			<CreatePost update={update} setUpdate={setUpdate} />
-			<Posts update={update} setUpdate={setUpdate} />
+			<div>
+				<section>
+					<CreatePost update={update} setUpdate={setUpdate} />
+					<Posts update={update} setUpdate={setUpdate} />
+				</section>
+
+				<Hashtags update={update} />
+			</div>
 		</Main>
 	);
 }
 
 const Main = styled.main`
-	max-width: 611px;
-	flex-direction: column;
+	width: fit-content;
 	align-items: flex-start;
 	margin: 78px auto 0;
 	transition: all 0.2s linear;
@@ -33,8 +39,23 @@ const Main = styled.main`
 		margin: 0 0 43px;
 	}
 
+	& > div > section {
+		width: 611px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	& > div {
+		display: flex;
+		flex-direction: row;
+	}
+
 	@media (max-width: 611px) {
-		max-width: 100%;
+		width: 100%;
 		align-items: center;
+
+		& > div > section {
+			width: 100%;
+		}
 	}
 `;

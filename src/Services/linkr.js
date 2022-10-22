@@ -58,4 +58,12 @@ function editPost({ body, id }) {
 	return promise;
 }
 
-export { signIn, signUp, createPost, listPosts, deletePost, editPost };
+function listHashtags() {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/hashtags`, config);
+
+	return promise;
+}
+
+export { signIn, signUp, createPost, listPosts, deletePost, editPost, listHashtags };
