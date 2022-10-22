@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import axios from "axios";
 import Modal from "react-modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { ThreeDots as Loading } from "react-loader-spinner";
@@ -12,10 +12,15 @@ import * as service from "../../Services/linkr";
 Modal.setAppElement(".root");
 
 export default function Post({ post, update, setUpdate }) {
-	const [linkData, setLinkData] = useState({});
+	const [description, setDescription] = useState(post.description);
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [disabled, setDisabled] = useState(true);
+	const [linkData, setLinkData] = useState({});
+
 	const { setMessage } = useMessage();
+
+	const editRef = useRef();
 
 	useEffect(() => {
 		const promise = axios.get(`https://api.microlink.io/?url=${post.url}`);
@@ -28,9 +33,10 @@ export default function Post({ post, update, setUpdate }) {
 
 		const promise = service.deletePost(post.id);
 
-		promise.catch((error) => {
+		promise.catch(() => {
 			setModalIsOpen(false);
 			setIsLoading(false);
+
 			setMessage({
 				type: "alert",
 				message: {
@@ -40,11 +46,48 @@ export default function Post({ post, update, setUpdate }) {
 			});
 		});
 
-		promise.then((res) => {
+		promise.then(() => {
 			setModalIsOpen(false);
 			setIsLoading(false);
 			setUpdate(!update);
 		});
+	}
+
+	function editPost() {
+		setDisabled(true);
+
+		const promise = service.editPost({ id: post.id, body: { description } });
+
+		promise.catch(() => {
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Não foi possível editar o post.",
+				},
+			});
+
+			setDisabled(false);
+		});
+	}
+
+	function editDescription() {
+		if (disabled) {
+			setDisabled(false);
+
+			setTimeout(() => editRef.current.focus(), 100);
+		} else {
+			setDisabled(true);
+			setDescription(post.description);
+		}
+	}
+
+	function onKeyPress(event) {
+		if (event.key === "Esc") {
+			setDisabled(true);
+		} else if (event.key === "Enter") {
+			editPost();
+		}
 	}
 
 	return (
@@ -81,7 +124,7 @@ export default function Post({ post, update, setUpdate }) {
 						<div>
 							{post.owner ? (
 								<>
-									<EditIcon size="20px" />
+									<EditIcon size="20px" onClick={editDescription} />
 									<TrashIcon size="15px" onClick={() => setModalIsOpen(true)} />
 								</>
 							) : (
@@ -90,7 +133,13 @@ export default function Post({ post, update, setUpdate }) {
 						</div>
 					</div>
 
-					<textarea defaultValue={post.description} />
+					<textarea
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+						ref={editRef}
+						onKeyPress={onKeyPress}
+						disabled={disabled}
+					/>
 
 					{linkData.title ? (
 						<Snippet onClick={() => window.open(post.url)}>
@@ -160,10 +209,16 @@ const PostData = styled.div`
 			width: 100%;
 			height: auto;
 			border-radius: 6px;
-			background-color: transparent;
+			background-color: #ffffff;
 			border: none;
 			resize: none;
 			font-size: 17px;
+			color: #4c4c4c;
+			margin: 7px 0 3px;
+		}
+
+		textarea:disabled {
+			background-color: transparent;
 			color: #b7b7b7;
 		}
 	}

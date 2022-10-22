@@ -50,4 +50,12 @@ function deletePost(id) {
 	return promise;
 }
 
-export { signIn, signUp, createPost, listPosts, deletePost };
+function editPost({ body, id }) {
+	const config = createHeaders();
+
+	const promise = axios.put(`${API_URL}/posts/${id}`, body, config);
+
+	return promise;
+}
+
+export { signIn, signUp, createPost, listPosts, deletePost, editPost };
