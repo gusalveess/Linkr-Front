@@ -50,4 +50,12 @@ function deletePost(id) {
 	return promise;
 }
 
-export { signIn, signUp, createPost, listPosts, deletePost };
+function listHashtags(id) {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/hashtags`, config);
+
+	return promise;
+}
+
+export { signIn, signUp, createPost, listPosts, deletePost, listHashtags };
