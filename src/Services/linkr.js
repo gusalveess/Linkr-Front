@@ -74,6 +74,14 @@ function listPostsWithHashtag(hashtag) {
 	return promise;
 }
 
+function listPostsId(id){
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/user/${id}`)
+
+	return promise
+}
+
 export {
 	signIn,
 	signUp,
