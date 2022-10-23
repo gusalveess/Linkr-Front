@@ -32,7 +32,7 @@ const Container = styled.section`
 	display: flex;
 	flex-direction: column;
 	font-family: "Lato", sans-serif;
-	margin: 30px auto 0;
+	margin: 0 auto;
 
 	span {
 		height: 40px;
