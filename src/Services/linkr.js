@@ -77,7 +77,7 @@ function listPostsWithHashtag(hashtag) {
 function listPostsId(id){
 	const config = createHeaders();
 
-	const promise = axios.get(`${API_URL}/user/${id}`)
+	const promise = axios.get(`${API_URL}/user/${id}`,config)
 
 	return promise
 }
