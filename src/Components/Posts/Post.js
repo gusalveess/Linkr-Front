@@ -142,11 +142,11 @@ export default function Post({ post, update, setUpdate }) {
 			</DeleteModal>
 
 			<Wrapper>
-				<div>
+				<User>
 				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>
 				{like ? ( <h3><IoMdHeartEmpty size="30px" onClick={()=>setLike(false)}/></h3>):( <h3><AiFillHeart size="30px" color="red"  onClick={()=>setLike(true)}/></h3>)}	{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 				<h4>0 likes</h4>
-				</div>
+				</User>
 
 				<PostData>
 					<div>
@@ -226,6 +226,29 @@ const Wrapper = styled.div`
 		height: 24px;
 		font-size: 19px;
 	}
+
+	a {
+		color: #ffffff;
+		font-weight: 700;
+	}
+
+	@media (max-width: 611px) {
+		border-radius: 0;
+
+		h2 {
+			font-size: 17px;
+		}
+	}
+`;
+
+const User = styled.div`
+	width: fit-content;
+	height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;	
+	margin: 0 10px 0 0;
+
  /////////////////////////////////////
 	h3{
 		margin-left:10px;
@@ -236,25 +259,24 @@ const Wrapper = styled.div`
 		font-size:11px;
 	}
 	 /////////////////////////////////////
-	div {
-		width: 68px;
-		height: 100%;
 
-		img {
-			width: 50px;
-			height: 50px;
-			object-fit: cover;
-			border-radius: 50%;
-		}
-	}
-
-	a {
-		color: #ffffff;
-		font-weight: 700;
+	img {
+		width: 50px;
+		height: 50px;
+		object-fit: cover;
+		border-radius: 50%;
 	}
 
 	@media (max-width: 611px) {
-		border-radius: 0;
+		img {
+			width: 40px;
+			height: 40px;
+		}
+
+		svg {
+			width: 20px;
+			height: 20px;
+		}
 	}
 `;
 
@@ -263,6 +285,7 @@ const PostData = styled.div`
 		width: 100%;
 		height: auto;
 		overflow: hidden;
+
 		textarea {
 			width: 100%;
 			height: auto;
@@ -287,74 +310,129 @@ const PostData = styled.div`
 			height: auto;
 			font-size: 17px;
 			color: #b7b7b7;
-			margin: 3px 0 10px;
+			margin: 3px 0 12px;
 		}
-	}
 
-	& > div {
-		width: 100%;
-		height: fit-content;
-		display: flex;
-		justify-content: space-between;
-
-		div {
-			width: fit-content;
+		& > div {
+			width: 100%;
+			height: fit-content;
 			display: flex;
-			align-items: center;
+			justify-content: space-between;
+
+			div {
+				width: fit-content;
+				display: flex;
+				align-items: center;
+			}
+
+			svg {
+				margin: 0 0 0 10px;
+				cursor: pointer;
+			}
 		}
 
-		svg {
-			margin: 0 0 0 10px;
-			cursor: pointer;
+		@media (max-width: 611px) {
+			textarea, p {
+				font-size: 15px;
+				line-height: 15px;
+			}
+
+			& > div {
+				div {
+					width: 100%;
+					justify-content: flex-end;
+				}
+			}
 		}
 	}
 `;
 
 const Snippet = styled.div`
 	&& {
-		width: 100%;
-		height: 155px;
-		display: flex;
-		cursor: pointer;
-		div {
+		&& {
 			width: 100%;
-			height: 100%;
-			border-radius: 11px 0 0 11px;
+			height: 155px;
 			display: flex;
-			flex-direction: column;
+			cursor: pointer;
 			align-items: flex-start;
 
-			h2 {
-				font-size: 16px;
-				color: #cecece;
+			div {
+				width: 100%;
+				height: 100%;
+				border-radius: 11px 0 0 11px;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+
+				h2 {
+					font-size: 16px;
+					color: #cecece;
+				}
+
+				p {
+					font-size: 11px;
+					color: #9b9595;
+				}
+
+				span {
+					height: auto;
+					font-size: 11px;
+					color: #cecece;
+					margin: 0;
+				}
 			}
 
-			p {
-				font-size: 11px;
-				color: #9b9595;
+			img {
+				width: 153px;
+				height: 155px;
+				object-fit: fill;
+				border-radius: 0 11px 11px 0;
+				border: 1px solid #4d4d4d;
 			}
 
-			span {
+			& > div {
+				border: 1px solid #4d4d4d;
+				border-right-width: 0;
+				padding: 20px;
+				justify-content: space-between;
+			}
+
+			@media (max-width: 611px) {
+				width: 100%;
 				height: auto;
-				font-size: 11px;
-				color: #cecece;
-				margin: 0;
+
+				img {
+					width: 95px;
+					height: 115px;
+					object-fit: contain;
+				}
+
+				& > div {
+					width: 100%;
+					height: 115px;
+					padding: 10px;
+
+						div {
+							justify-content: flex-start;
+						}
+				}
+
+				h2 {
+					font-size: 11px;
+					align-self: flex-start;
+				}
+
+				p {
+					margin-bottom: 5px; 
+					max-height: 45px;
+					overflow: hidden;
+				}
+
+				span, p {
+					font-size: 9px;
+					align-self: flex-start;
+				}
 			}
-		}
-
-		img {
-			width: 153px;
-			height: 155px;
-			object-fit: fill;
-			border-radius: 0 11px 11px 0;
-			border: 1px solid #4d4d4d;
-		}
-
-		& > div {
-			border: 1px solid #4d4d4d;
-			border-right-width: 0;
-			padding: 20px;
-			justify-content: space-between;
 		}
 	}
 `;

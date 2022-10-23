@@ -38,5 +38,11 @@ const Main = styled.main`
 		& > div > section {
 			width: 100%;
 		}
+
+		& > div {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+		}
 	}
 `;
