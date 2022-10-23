@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as service from "../../Services/linkr";
 import { useMessage } from "../../Contexts/messageContext";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 
 import MainStyle from "../Common/MainStyle";
@@ -10,8 +10,7 @@ import Posts from "../Posts/Posts";
 import Hashtags from "../Hashtags/Hashtags";
 
 export default function PostsUser(){
-    const {id} = useParams();
-
+    const { id } = useParams();
 
 	const [update, setUpdate] = useState(false);
 	const [posts, setPosts] = useState(false);
@@ -32,13 +31,12 @@ export default function PostsUser(){
 
 		promise.then(({ data }) => {
 			setPosts(data);
-			console.log(data)
 		});
 	}, [update]);
 
 	return (
 		<MainStyle>
-			<h1>{posts[0].from} posts</h1>
+			<h1>{posts ? `${posts[0].from}'s posts`: "Loading..."}</h1>
 
 			<div>
 				<section>
