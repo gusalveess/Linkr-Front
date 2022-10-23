@@ -66,4 +66,21 @@ function listHashtags() {
 	return promise;
 }
 
-export { signIn, signUp, createPost, listPosts, deletePost, editPost, listHashtags };
+function listPostsWithHashtag(hashtag) {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/posts/${hashtag}`, config);
+
+	return promise;
+}
+
+export {
+	signIn,
+	signUp,
+	createPost,
+	listPosts,
+	deletePost,
+	editPost,
+	listHashtags,
+	listPostsWithHashtag,
+};

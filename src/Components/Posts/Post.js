@@ -32,7 +32,7 @@ export default function Post({ post, update, setUpdate }) {
 	}, [post.url]);
 
 	useEffect(() => {
-		setDescription(post.description)
+		setDescription(post.description);
 	}, [post.description]);
 
 	function deletePostFunction() {
@@ -63,17 +63,19 @@ export default function Post({ post, update, setUpdate }) {
 	function editPost() {
 		setDisabled(true);
 
-  const descriptionArray = description.split(" ");
-const tags = [];
+		const descriptionArray = description.split(" ");
+		const tags = [];
 
-    descriptionArray.forEach((word) => {
-      if (word[0] === "#") {
-        tags.push(word.slice(1).toLowerCase());
-      }
-    });
+		descriptionArray.forEach((word) => {
+			if (word[0] === "#") {
+				tags.push(word.slice(1).toLowerCase());
+			}
+		});
 
-
-		const promise = service.editPost({ id: post.id, body: { description, tags } });
+		const promise = service.editPost({
+			id: post.id,
+			body: { description, tags },
+		});
 
 		promise.catch(() => {
 			setMessage({
@@ -88,7 +90,7 @@ const tags = [];
 		});
 
 		promise.then(() => {
-setUpdate(!update);
+			setUpdate(!update);
 		});
 	}
 
