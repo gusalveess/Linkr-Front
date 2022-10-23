@@ -145,7 +145,7 @@ export default function Post({ post, update, setUpdate }) {
 				<div>
 				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>
 				{like ? ( <h3><IoMdHeartEmpty size="30px" onClick={()=>setLike(false)}/></h3>):( <h3><AiFillHeart size="30px" color="red"  onClick={()=>setLike(true)}/></h3>)}	{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-				<h4>666 likes</h4>
+				<h4>0 likes</h4>
 				</div>
 
 				<PostData>
