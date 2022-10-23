@@ -123,6 +123,14 @@ const Container = styled.div`
 			border-radius: 50%;
 		}
 	}
+
+	@media (max-width: 611px) {
+		border-radius: 0;
+
+		div {
+			display: none;
+		}
+	}
 `;
 
 const Form = styled.form`
@@ -175,5 +183,19 @@ const Form = styled.form`
 	button:hover,
 	button:disabled {
 		filter: brightness(0.8);
+	}
+
+	@media (max-width: 611px) {
+		h2 {
+			font-size: 17px;
+			align-self: center;
+		}
+
+		input,
+		textarea,
+		input:placeholde,
+		button {
+			font-size: 13px;
+		}
 	}
 `;
