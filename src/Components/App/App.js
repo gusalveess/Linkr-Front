@@ -2,11 +2,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MessageProvider } from "../../Contexts/messageContext";
 
 import GlobalStyle from "./GlobalStyle";
+import PrivatePage from "../PrivatePage/PrivatePage";
 import Alert from "../Alert/Alert";
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignUp/SignUp";
-import PrivatePage from "../PrivatePage/PrivatePage";
 import Timeline from "../Timeline/Timeline";
+import HashtagPage from "../Hashtags/HashtagPage";
 
 export default function App() {
 	return (
@@ -26,6 +27,15 @@ export default function App() {
 							element={
 								<PrivatePage>
 									<Timeline />
+								</PrivatePage>
+							}
+						/>
+
+						<Route
+							path="/hashtag/:hashtag"
+							element={
+								<PrivatePage>
+									<HashtagPage />
 								</PrivatePage>
 							}
 						/>

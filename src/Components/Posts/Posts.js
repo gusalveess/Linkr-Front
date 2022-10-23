@@ -1,32 +1,8 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import * as service from "../../Services/linkr";
-import { useMessage } from "../../Contexts/messageContext";
 
 import Post from "./Post";
 
-export default function Posts({ update, setUpdate }) {
-	const [posts, setPosts] = useState(false);
-	const { setMessage } = useMessage();
-
-	useEffect(() => {
-		const promise = service.listPosts();
-
-		promise.catch(() => {
-			setMessage({
-				type: "alert",
-				message: {
-					type: "error",
-					text: "An error occured while trying to fetch the posts, please refresh the page.",
-				},
-			});
-		});
-
-		promise.then(({ data }) => {
-			setPosts(data);
-		});
-	}, [update]);
-
+export default function Posts({ update, setUpdate, posts }) {
 	return (
 		<Container>
 			{posts ? (

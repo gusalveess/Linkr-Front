@@ -10,7 +10,6 @@ export default function SignUp() {
 	const [password, setPassword] = useState("");
 	const [username, setUserName] = useState("");
 	const [picture, setPicture] = useState("");
-	const [signUp, setSignUp] = useState("Sign Up");
 	const [disable, setDisable] = useState(false);
 
 	const { setMessage } = useMessage();
@@ -26,7 +25,6 @@ export default function SignUp() {
 		};
 
 		setDisable(true);
-		setSignUp(<ThreeDots color="#FFFFFF" height={13} width={51} />);
 
 		const promise = service.signUp(body);
 
@@ -40,7 +38,6 @@ export default function SignUp() {
 			});
 
 			setDisable(false);
-			setSignUp("Sign Up");
 		});
 
 		promise.then(() => {
@@ -108,7 +105,13 @@ export default function SignUp() {
 							required
 						/>
 
-						<button>{signUp}</button>
+						<button>
+							{disable ? (
+								<ThreeDots color="#FFFFFF" height={13} width={51} />
+							) : (
+								"Sign Up"
+							)}
+						</button>
 					</form>
 
 					<p onClick={() => Navigate("/")}>Switch back to log in</p>

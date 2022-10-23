@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import * as service from "../../Services/linkr";
 import { useMessage } from "../../Contexts/messageContext";
 
 import MainStyle from "../Common/MainStyle";
-import CreatePost from "./CreatePost";
 import Posts from "../Posts/Posts";
-import Hashtags from "../Hashtags/Hashtags";
+import Hashtags from "./Hashtags";
 
-export default function Timeline() {
+export default function HashtagPage() {
 	const [update, setUpdate] = useState(false);
 	const [posts, setPosts] = useState(false);
 	const { setMessage } = useMessage();
 
+	const { hashtag } = useParams();
+
 	useEffect(() => {
-		const promise = service.listPosts();
+		const promise = service.listPostsWithHashtag(hashtag);
 
 		promise.catch(() => {
 			setMessage({
@@ -28,15 +30,14 @@ export default function Timeline() {
 		promise.then(({ data }) => {
 			setPosts(data);
 		});
-	}, [update]);
+	}, [hashtag, update]);
 
 	return (
 		<MainStyle>
-			<h1>timeline</h1>
+			<h1># {hashtag}</h1>
 
 			<div>
 				<section>
-					<CreatePost update={update} setUpdate={setUpdate} />
 					<Posts update={update} setUpdate={setUpdate} posts={posts} />
 				</section>
 
