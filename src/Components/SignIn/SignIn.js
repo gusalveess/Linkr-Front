@@ -15,7 +15,7 @@ export default function SignIn() {
 	const Navigate = useNavigate();
 	
 	useEffect(() => {
-	  	const isLogged = (JSON.parse(localStorage.getItem("linkr"))).token;
+	  	const isLogged = (JSON.parse(localStorage.getItem("linkr")))?.token;
 		
 	 	if (isLogged) {
 	  		Navigate("/timeline");
