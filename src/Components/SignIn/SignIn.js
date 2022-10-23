@@ -14,13 +14,13 @@ export default function SignIn() {
 
 	const Navigate = useNavigate();
 	
-	useEffect(() => {
-		const isLogged = (JSON.parse(localStorage.getItem("linkr"))).token;
+	//  useEffect(() => {
+	//  	const isLogged = (JSON.parse(localStorage.getItem("linkr"))).token;
 		
-		if (isLogged) {
-			Navigate("/timeline");
-		};
-	});
+	//  	if (isLogged) {
+	//  		Navigate("/timeline");
+	//  	};
+	//  });
 
 	function Post() {
 		const body = {
@@ -31,6 +31,7 @@ export default function SignIn() {
 		setDisable(true);
 
 		const promise = service.signIn(body);
+		console.log(promise)
 
 		promise.catch((error) => {
 			if (error.response) {

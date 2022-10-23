@@ -10,9 +10,15 @@ import { Link} from 'react-router-dom';
 export default function Header() {
   const[search,setSearch]=useState('')
   const [click,setClick]=useState(false)
-  //const img = "https://criticalhits.com.br/wp-content/uploads/2022/03/goku_an6e.h720-910x665.webp"
+
+  let user = JSON.parse(localStorage.getItem("linkr"));
+
+  const img = user.userImage
   //console.log(search)
   const v={ color: "white", fontSize: "1.5em" }
+  
+
+
   return (
     <>
       <Top>
