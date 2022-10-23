@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import { useMessage } from "../../Contexts/messageContext";
@@ -13,6 +13,14 @@ export default function SignIn() {
 	const { setMessage } = useMessage();
 
 	const Navigate = useNavigate();
+	
+	useEffect(() => {
+		const isLogged = (JSON.parse(localStorage.getItem("linkr"))).token;
+		
+		if (isLogged) {
+			Navigate("/timeline");
+		};
+	});
 
 	function Post() {
 		const body = {
