@@ -8,6 +8,7 @@ import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignUp/SignUp";
 import Timeline from "../Timeline/Timeline";
 import HashtagPage from "../Hashtags/HashtagPage";
+import PostsUser from "../Posts/PostsUser";
 
 export default function App() {
 	return (
@@ -36,6 +37,14 @@ export default function App() {
 							element={
 								<PrivatePage>
 									<HashtagPage />
+								</PrivatePage>
+							}
+						/>
+						<Route
+							path="/user/:id"
+							element={
+								<PrivatePage>
+									<PostsUser/>
 								</PrivatePage>
 							}
 						/>

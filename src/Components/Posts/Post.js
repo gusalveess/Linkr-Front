@@ -138,12 +138,12 @@ export default function Post({ post, update, setUpdate }) {
 
 			<Wrapper>
 				<div>
-					<img src={post.userImage} alt="user" />
+				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>	
 				</div>
 
 				<PostData>
 					<div>
-						<h2>{post.from}</h2>
+					<Link to={`/user/${post.userId}`}><h2>{post.from}</h2></Link>
 						<div>
 							{post.owner ? (
 								<>

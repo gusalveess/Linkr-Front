@@ -91,4 +91,5 @@ export {
 	editPost,
 	listHashtags,
 	listPostsWithHashtag,
+	listPostsId
 };

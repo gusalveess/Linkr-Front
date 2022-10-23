@@ -27,7 +27,7 @@ export default function Timeline() {
 
 		promise.then(({ data }) => {
 			setPosts(data);
-			console.log(data)
+		
 		});
 	}, [update]);
 
