@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { ThreeDots as Loading } from "react-loader-spinner";
+import { IoMdHeartEmpty } from "react-icons/io";//ESSE
+import { AiFillHeart } from "react-icons/ai";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
@@ -20,10 +22,13 @@ export default function Post({ post, update, setUpdate }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [disabled, setDisabled] = useState(true);
 	const [linkData, setLinkData] = useState({});
+	const [like, setLike] = useState(true)
 
 	const { setMessage } = useMessage();
 
 	const editRef = useRef();
+
+	const heart={ color: "white", fontSize: "1.5em" }
 
 	useEffect(() => {
 		const promise = axios.get(`https://api.microlink.io/?url=${post.url}`);
@@ -138,7 +143,9 @@ export default function Post({ post, update, setUpdate }) {
 
 			<Wrapper>
 				<div>
-				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>	
+				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>
+				{like ? ( <h3><IoMdHeartEmpty size="30px" onClick={()=>setLike(false)}/></h3>):( <h3><AiFillHeart size="30px" color="red"  onClick={()=>setLike(true)}/></h3>)}	{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+				<h4>666 likes</h4>
 				</div>
 
 				<PostData>
@@ -213,12 +220,22 @@ const Wrapper = styled.div`
 	font-weight: 400;
 	font-size: 17px;
 	overflow: hidden;
+	
 
 	h2 {
 		height: 24px;
 		font-size: 19px;
 	}
-
+ /////////////////////////////////////
+	h3{
+		margin-left:10px;
+		margin-top:10px;
+	}
+	h4{
+		font-family: "Lato", sans-serif;
+		font-size:11px;
+	}
+	 /////////////////////////////////////
 	div {
 		width: 68px;
 		height: 100%;
@@ -246,7 +263,6 @@ const PostData = styled.div`
 		width: 100%;
 		height: auto;
 		overflow: hidden;
-
 		textarea {
 			width: 100%;
 			height: auto;
@@ -300,7 +316,6 @@ const Snippet = styled.div`
 		height: 155px;
 		display: flex;
 		cursor: pointer;
-
 		div {
 			width: 100%;
 			height: 100%;
@@ -380,7 +395,7 @@ const Buttons = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
+	
 	button {
 		width: 134px;
 		height: 37px;
