@@ -1,20 +1,16 @@
 import styled from "styled-components";
 import axios from "axios";
-import Modal from "react-modal";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import ReactHashtag from "@mdnm/react-hashtag";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
-import { ThreeDots as Loading } from "react-loader-spinner";
 import { IoMdHeartEmpty } from "react-icons/io"; //ESSE
 import { AiFillHeart } from "react-icons/ai";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
-
-import ReactHashtag from "@mdnm/react-hashtag";
-
-Modal.setAppElement(".root");
+import DeleteModal from "../Common/Modal";
 
 export default function Post({ post, update, setUpdate }) {
 	const [description, setDescription] = useState(post.description);
@@ -121,25 +117,14 @@ export default function Post({ post, update, setUpdate }) {
 	return (
 		<>
 			<DeleteModal
-				isOpen={modalIsOpen}
-				onRequestClose={() => setModalIsOpen(false)}
-			>
-				{isLoading ? (
-					<Loading color="#FFFFFF" height={13} width={51} />
-				) : (
-					<div>
-						<div>
-							<h1>Are you sure you want to delete this post?</h1>
-						</div>
-
-						<Buttons>
-							<button onClick={() => setModalIsOpen(false)}>No, go back</button>
-
-							<Confirm onClick={deletePostFunction}>Yes, delete it</Confirm>
-						</Buttons>
-					</div>
-				)}
-			</DeleteModal>
+				modalIsOpen={modalIsOpen}
+				setModalIsOpen={setModalIsOpen}
+				isLoading={isLoading}
+				textAction="Are you sure you want to delete this post?"
+				textCancel="No, go back"
+				textConfirm="Yes, delete it"
+				functionConfirm={deletePostFunction}
+			/>
 
 			<Wrapper>
 				<User>
@@ -159,7 +144,7 @@ export default function Post({ post, update, setUpdate }) {
 							/>
 						</h3>
 					)}{" "}
-					{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+					{/*/////////////////////////////////////////////////// */}
 					<h4>0 likes</h4>
 				</User>
 
@@ -168,6 +153,7 @@ export default function Post({ post, update, setUpdate }) {
 						<Link to={`/user/${post.userId}`}>
 							<h2>{post.from}</h2>
 						</Link>
+
 						<div>
 							{post.owner ? (
 								<>
@@ -454,69 +440,5 @@ const Snippet = styled.div`
 				}
 			}
 		}
-	}
-`;
-
-const DeleteModal = styled(Modal)`
-	width: 100%;
-	height: 100%;
-	display: flex;
-
-	& > div {
-		width: 90%;
-		max-width: 500px;
-		height: 250px;
-		margin: auto;
-		border-radius: 50px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-evenly;
-		padding: 30px 0;
-		background-color: #333333;
-		font-family: "Lato", sans-serif;
-		color: #ffffff;
-		text-align: center;
-		font-size: 28px;
-		font-weight: 700;
-
-		div {
-			width: 100%;
-			max-width: 338px;
-			align-items: flex-start;
-		}
-	}
-`;
-
-const Buttons = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	button {
-		width: 134px;
-		height: 37px;
-		border-radius: 5px;
-		border: none;
-		margin: 0 13px 0;
-		background-color: #ffffff;
-		color: #1877f2;
-		font-family: "Lato", sans-serif;
-		font-size: 16px;
-		font-weight: 400;
-		cursor: pointer;
-	}
-
-	button:hover {
-		filter: brightness(0.9);
-	}
-`;
-
-const Confirm = styled.button`
-	&& {
-		background-color: #1877f2;
-		color: #ffffff;
-		font-weight: 700;
 	}
 `;
