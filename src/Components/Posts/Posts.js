@@ -12,12 +12,13 @@ export default function Posts({
 	posts,
 	listMorePosts,
 	hasMorePosts,
+	text = "There are no posts yet"
 }) {
 	return (
 		<Container>
 			{posts ? (
 				posts.length === 0 ? (
-					<span>There are no posts yet</span>
+					<span>{text}</span>
 				) : (
 					<InfiniteScroll
 						pageStart={0}
