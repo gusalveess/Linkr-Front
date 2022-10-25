@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://linkrr-project.herokuapp.com"; //"http://localhost:4000";
+const API_URL = "https://linkrr-project.herokuapp.com";
 
 function createHeaders() {
 	const token = JSON.parse(localStorage.getItem("linkr"))?.token;

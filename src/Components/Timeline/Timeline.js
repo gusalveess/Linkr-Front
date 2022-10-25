@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useState, useEffect } from "react";
 import * as service from "../../Services/linkr";
 import { useMessage } from "../../Contexts/messageContext";
@@ -27,7 +28,6 @@ export default function Timeline() {
 
 		promise.then(({ data }) => {
 			setPosts(data);
-		
 		});
 	}, [update]);
 
@@ -38,7 +38,21 @@ export default function Timeline() {
 			<div>
 				<section>
 					<CreatePost update={update} setUpdate={setUpdate} />
-					<Posts update={update} setUpdate={setUpdate} posts={posts} />
+
+					{posts === false ? (
+						<Posts update={update} setUpdate={setUpdate} posts={posts} />
+					) : posts[0].followeds !== "0" && posts[0].url ? (
+						<Posts update={update} setUpdate={setUpdate} posts={posts} />
+					) : posts[0].followeds !== "0" && !posts[0].url ? (
+						<Text>No posts found from your friends</Text>
+					) : posts[0].followeds === "0" && !posts[0].url ? (
+						<Text>You don't follow anyone yet. Search for new friends!</Text>
+					) : (
+						<>
+							<Text>You don't follow anyone yet. Search for new friends!</Text>
+							<Posts update={update} setUpdate={setUpdate} posts={posts} />
+						</>
+					)}
 				</section>
 
 				<Hashtags update={update} />
@@ -46,3 +60,11 @@ export default function Timeline() {
 		</MainStyle>
 	);
 }
+
+const Text = styled.span`
+	width: fit-content;
+	height: 40px;
+	font-size: 20px;
+	color: #ffffff;
+	margin: auto;
+`;
