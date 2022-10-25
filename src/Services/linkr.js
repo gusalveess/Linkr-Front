@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://linkrr-project.herokuapp.com"; //"http://localhost:4000";
+const API_URL = "https://linkrr-project.herokuapp.com";
 
 function createHeaders() {
 	const token = JSON.parse(localStorage.getItem("linkr"))?.token;
@@ -34,10 +34,10 @@ function createPost(body) {
 	return promise;
 }
 
-function listPosts() {
+function listPosts(page) {
 	const config = createHeaders();
 
-	const promise = axios.get(`${API_URL}/posts`, config);
+	const promise = axios.get(`${API_URL}/posts/?page=${page}`, config);
 
 	return promise;
 }
@@ -66,20 +66,23 @@ function listHashtags() {
 	return promise;
 }
 
-function listPostsWithHashtag(hashtag) {
+function listPostsWithHashtag(hashtag, page) {
 	const config = createHeaders();
 
-	const promise = axios.get(`${API_URL}/posts/${hashtag}`, config);
+	const promise = axios.get(
+		`${API_URL}/posts/${hashtag}/?page=${page}`,
+		config
+	);
 
 	return promise;
 }
 
-function listPostsId(id){
+function listPostsId(id, page) {
 	const config = createHeaders();
 
-	const promise = axios.get(`${API_URL}/user/${id}`,config)
+	const promise = axios.get(`${API_URL}/user/${id}/?page=${page}`, config);
 
-	return promise
+	return promise;
 }
 
 export {
@@ -91,5 +94,5 @@ export {
 	editPost,
 	listHashtags,
 	listPostsWithHashtag,
-	listPostsId
+	listPostsId,
 };

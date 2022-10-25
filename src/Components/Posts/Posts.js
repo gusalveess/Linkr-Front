@@ -1,22 +1,40 @@
 import styled from "styled-components";
 
+import InfiniteScroll from "react-infinite-scroller";
+
+import LoadingSpinnerText from "../Common/LoadingSpinnerText";
+
 import Post from "./Post";
 
-export default function Posts({ update, setUpdate, posts }) {
+export default function Posts({
+	update,
+	setUpdate,
+	posts,
+	listMorePosts,
+	hasMorePosts,
+	text = "There are no posts yet"
+}) {
 	return (
 		<Container>
 			{posts ? (
 				posts.length === 0 ? (
-					<span>There are no posts yet</span>
+					<span>{text}</span>
 				) : (
-					posts.map((post, index) => (
-						<Post
-							key={index}
-							post={post}
-							update={update}
-							setUpdate={setUpdate}
-						/>
-					))
+					<InfiniteScroll
+						pageStart={0}
+						loadMore={listMorePosts}
+						hasMore={hasMorePosts}
+						loader={<LoadingSpinnerText text="Loading more posts..." />}
+					>
+						{posts.map((post, index) => (
+							<Post
+								key={index}
+								post={post}
+								update={update}
+								setUpdate={setUpdate}
+							/>
+						))}
+					</InfiniteScroll>
 				)
 			) : (
 				<span>Loading...</span>
