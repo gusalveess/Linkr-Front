@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { ThreeDots as Loading } from "react-loader-spinner";
-import { IoMdHeartEmpty } from "react-icons/io";//ESSE
+import { IoMdHeartEmpty } from "react-icons/io"; //ESSE
 import { AiFillHeart } from "react-icons/ai";
 
 import { useMessage } from "../../Contexts/messageContext";
@@ -22,13 +22,13 @@ export default function Post({ post, update, setUpdate }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [disabled, setDisabled] = useState(true);
 	const [linkData, setLinkData] = useState({});
-	const [like, setLike] = useState(true)
+	const [like, setLike] = useState(true);
 
 	const { setMessage } = useMessage();
 
 	const editRef = useRef();
 
-	const heart={ color: "white", fontSize: "1.5em" }
+	const heart = { color: "white", fontSize: "1.5em" };
 
 	useEffect(() => {
 		const promise = axios.get(`https://api.microlink.io/?url=${post.url}`);
@@ -143,14 +143,31 @@ export default function Post({ post, update, setUpdate }) {
 
 			<Wrapper>
 				<User>
-				<Link to={`/user/${post.userId}`}><img src={post.userImage} alt="user" /></Link>
-				{like ? ( <h3><IoMdHeartEmpty size="30px" onClick={()=>setLike(false)}/></h3>):( <h3><AiFillHeart size="30px" color="red"  onClick={()=>setLike(true)}/></h3>)}	{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-				<h4>0 likes</h4>
+					<Link to={`/user/${post.userId}`}>
+						<img src={post.userImage} alt="user" />
+					</Link>
+					{like ? (
+						<h3>
+							<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+						</h3>
+					) : (
+						<h3>
+							<AiFillHeart
+								size="30px"
+								color="red"
+								onClick={() => setLike(true)}
+							/>
+						</h3>
+					)}{" "}
+					{/*//////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+					<h4>0 likes</h4>
 				</User>
 
 				<PostData>
 					<div>
-					<Link to={`/user/${post.userId}`}><h2>{post.from}</h2></Link>
+						<Link to={`/user/${post.userId}`}>
+							<h2>{post.from}</h2>
+						</Link>
 						<div>
 							{post.owner ? (
 								<>
@@ -167,7 +184,9 @@ export default function Post({ post, update, setUpdate }) {
 						<p>
 							<ReactHashtag
 								renderHashtag={(hashtagValue) => (
-									<Link to={`/hashtag/${hashtagValue.slice(1)}`}>
+									<Link
+										to={`/hashtag/${hashtagValue?.slice(1)?.toLowerCase()}`}
+									>
 										{hashtagValue?.toLowerCase()}
 									</Link>
 								)}
@@ -220,7 +239,6 @@ const Wrapper = styled.div`
 	font-weight: 400;
 	font-size: 17px;
 	overflow: hidden;
-	
 
 	h2 {
 		height: 24px;
@@ -244,21 +262,21 @@ const Wrapper = styled.div`
 const User = styled.div`
 	width: fit-content;
 	height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	margin: 0 10px 0 0;
 
- /////////////////////////////////////
-	h3{
-		margin-left:10px;
-		margin-top:10px;
+	/////////////////////////////////////
+	h3 {
+		margin-left: 10px;
+		margin-top: 10px;
 	}
-	h4{
+	h4 {
 		font-family: "Lato", sans-serif;
-		font-size:11px;
+		font-size: 11px;
 	}
-	 /////////////////////////////////////
+	/////////////////////////////////////
 
 	img {
 		width: 50px;
@@ -332,7 +350,8 @@ const PostData = styled.div`
 		}
 
 		@media (max-width: 611px) {
-			textarea, p {
+			textarea,
+			p {
 				font-size: 15px;
 				line-height: 15px;
 			}
@@ -412,9 +431,9 @@ const Snippet = styled.div`
 					height: 115px;
 					padding: 10px;
 
-						div {
-							justify-content: flex-start;
-						}
+					div {
+						justify-content: flex-start;
+					}
 				}
 
 				h2 {
@@ -423,12 +442,13 @@ const Snippet = styled.div`
 				}
 
 				p {
-					margin-bottom: 5px; 
+					margin-bottom: 5px;
 					max-height: 45px;
 					overflow: hidden;
 				}
 
-				span, p {
+				span,
+				p {
 					font-size: 9px;
 					align-self: flex-start;
 				}
@@ -473,7 +493,7 @@ const Buttons = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	
+
 	button {
 		width: 134px;
 		height: 37px;
