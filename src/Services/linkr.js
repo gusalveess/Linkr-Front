@@ -85,6 +85,14 @@ function listPostsId(id, page) {
 	return promise;
 }
 
+function listPostsAfterId(id) {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/posts/?after=${id}`, config);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -95,4 +103,5 @@ export {
 	listHashtags,
 	listPostsWithHashtag,
 	listPostsId,
+	listPostsAfterId,
 };
