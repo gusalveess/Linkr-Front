@@ -52,21 +52,24 @@ export default function Timeline() {
 	}, [update]);
 
 	useInterval(() => {
-		const promise = service.listPostsAfterId(postsData.list[0].id);
+		if (Number(postsData.list[0]?.id)) {
+			const promise = service.listPostsAfterId(postsData.list[0].id);
 
-		promise.catch(() => {
-			setMessage({
-				type: "alert",
-				message: {
-					type: "error",
-					text: "An error occured while trying to fetch the new posts, please refresh the page.",
-				},
+			promise.catch(() => {
+				setMessage({
+					type: "alert",
+					message: {
+						type: "error",
+						text: `An error occured while trying to fetch the new posts,
+							please refresh the page.`,
+					},
+				});
 			});
-		});
 
-		promise.then(({ data }) => {
-			setNewPosts(data);
-		});
+			promise.then(({ data }) => {
+				setNewPosts(data);
+			});
+		}
 	}, 15000);
 
 	function listMorePosts(page) {

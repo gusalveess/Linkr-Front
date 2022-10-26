@@ -3,14 +3,16 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ReactHashtag from "@mdnm/react-hashtag";
+
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
+import { CgRepeat as RepostedIcon } from "react-icons/cg";
 import { IoMdHeartEmpty } from "react-icons/io"; //ESSE
 import { AiFillHeart } from "react-icons/ai";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
-import DeleteModal from "../Common/Modal";
+import Modal from "../Common/Modal";
 
 export default function Post({ post, update, setUpdate }) {
 	const [description, setDescription] = useState(post.description);
@@ -115,8 +117,8 @@ export default function Post({ post, update, setUpdate }) {
 	}
 
 	return (
-		<>
-			<DeleteModal
+		<Wrapper reposted={!!post.repostedBy}>
+			<Modal
 				modalIsOpen={modalIsOpen}
 				setModalIsOpen={setModalIsOpen}
 				isLoading={isLoading}
@@ -126,7 +128,20 @@ export default function Post({ post, update, setUpdate }) {
 				functionConfirm={deletePostFunction}
 			/>
 
-			<Wrapper>
+			{post.repostedBy ? (
+				<Reposted>
+					<RepostedIcon size={30} />
+
+					<span>
+						Re-posted by
+						<b>{post.repostedByUser ? " you" : ` ${post.repostedBy}`}</b>
+					</span>
+				</Reposted>
+			) : (
+				""
+			)}
+
+			<PostWrapper>
 				<User>
 					<Link to={`/user/${post.userId}`}>
 						<img src={post.userImage} alt="user" />
@@ -207,12 +222,40 @@ export default function Post({ post, update, setUpdate }) {
 						""
 					)}
 				</PostData>
-			</Wrapper>
-		</>
+			</PostWrapper>
+		</Wrapper>
 	);
 }
 
 const Wrapper = styled.div`
+	position: relative;
+	padding: ${(props) => (props.reposted ? "37px 0 0 0" : "0")};
+`;
+
+const Reposted = styled.div`
+	&& {
+		width: 100%;
+		height: 50px;
+		padding: 10px 13px 19px;
+		border-radius: 15px 15px 0 0;
+		background-color: #1e1e1e;
+		position: absolute;
+		top: 0;
+		z-index: -1;
+
+		display: flex;
+		align-items: center;
+
+		span {
+			width: 100%;
+			height: fit-content;
+			font-size: 12px;
+			overflow: hidden;
+		}
+	}
+`;
+
+const PostWrapper = styled.div`
 	width: 100%;
 	height: auto;
 	display: flex;
