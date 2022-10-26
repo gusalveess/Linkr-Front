@@ -16,6 +16,7 @@ import Modal from "../Common/Modal";
 
 export default function Post({ post, update, setUpdate }) {
 	const [description, setDescription] = useState(post.description);
+	const [modalData, setModalData] = useState({});
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [disabled, setDisabled] = useState(true);
@@ -38,6 +39,29 @@ export default function Post({ post, update, setUpdate }) {
 		setDescription(post.description);
 	}, [post.description]);
 
+	function callModal(type) {
+		if (type === "delete") {
+			setModalIsOpen(true);
+
+			setModalData({
+				textAction: "Are you sure you want to delete this post?",
+				textCancel: "No, go back",
+				textConfirm: "Yes, delete it",
+				functionConfirm: deletePostFunction,
+			});
+		}
+		if (type === "share") {
+			setModalIsOpen(true);
+
+			setModalData({
+				textAction: "Do you want to re-post this link?",
+				textCancel: "No, cancel",
+				textConfirm: "Yes, share!",
+				functionConfirm: sharePost,
+			});
+		}
+	}
+
 	function deletePostFunction() {
 		setIsLoading(true);
 
@@ -52,6 +76,31 @@ export default function Post({ post, update, setUpdate }) {
 				message: {
 					type: "error",
 					text: "Não foi possível apagar o post.",
+				},
+			});
+		});
+
+		promise.then(() => {
+			setModalIsOpen(false);
+			setIsLoading(false);
+			setUpdate(!update);
+		});
+	}
+
+	function sharePost() {
+		setIsLoading(true);
+
+		const promise = service.repost(post.id);
+
+		promise.catch(() => {
+			setModalIsOpen(false);
+			setIsLoading(false);
+
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Não foi possível compartilhar o post.",
 				},
 			});
 		});
@@ -121,11 +170,11 @@ export default function Post({ post, update, setUpdate }) {
 			<Modal
 				modalIsOpen={modalIsOpen}
 				setModalIsOpen={setModalIsOpen}
-				isLoading={isLoading}
-				textAction="Are you sure you want to delete this post?"
-				textCancel="No, go back"
-				textConfirm="Yes, delete it"
-				functionConfirm={deletePostFunction}
+				isLoading={modalData.isLoading}
+				textAction={modalData.textAction}
+				textCancel={modalData.textCancel}
+				textConfirm={modalData.textConfirm}
+				functionConfirm={modalData.functionConfirm}
 			/>
 
 			{post.repostedBy ? (
@@ -146,21 +195,32 @@ export default function Post({ post, update, setUpdate }) {
 					<Link to={`/user/${post.userId}`}>
 						<img src={post.userImage} alt="user" />
 					</Link>
-					{like ? (
+
+					<div>
+						{like ? (
+							<h3>
+								<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+							</h3>
+						) : (
+							<h3>
+								<AiFillHeart
+									size="30px"
+									color="red"
+									onClick={() => setLike(true)}
+								/>
+							</h3>
+						)}{" "}
+						{/*/////////////////////////////////////////////////// */}
+						<h4>{post.likesTotal} likes</h4>
+					</div>
+
+					<div>
 						<h3>
-							<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+							<RepostedIcon size={30} onClick={() => callModal("share")} />
 						</h3>
-					) : (
-						<h3>
-							<AiFillHeart
-								size="30px"
-								color="red"
-								onClick={() => setLike(true)}
-							/>
-						</h3>
-					)}{" "}
-					{/*/////////////////////////////////////////////////// */}
-					<h4>0 likes</h4>
+
+						<h4>{post.shareds} re-post</h4>
+					</div>
 				</User>
 
 				<PostData>
@@ -173,7 +233,7 @@ export default function Post({ post, update, setUpdate }) {
 							{post.owner ? (
 								<>
 									<EditIcon size="20px" onClick={editDescription} />
-									<TrashIcon size="15px" onClick={() => setModalIsOpen(true)} />
+									<TrashIcon size="15px" onClick={() => callModal("delete")} />
 								</>
 							) : (
 								""
@@ -298,9 +358,14 @@ const User = styled.div`
 
 	/////////////////////////////////////
 	h3 {
-		margin-left: 10px;
 		margin-top: 10px;
+		text-align: center;
+
+		svg {
+			cursor: pointer;
+		}
 	}
+
 	h4 {
 		font-family: "Lato", sans-serif;
 		font-size: 11px;

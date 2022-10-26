@@ -42,7 +42,7 @@ const Wrapper = styled(ReactModal)`
 	& > div {
 		width: 90%;
 		max-width: 500px;
-		height: 250px;
+		height: auto;
 		margin: auto;
 		border-radius: 50px;
 		display: flex;
@@ -70,6 +70,7 @@ const Buttons = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin: 30px auto 0;
 
 	button {
 		width: 134px;
