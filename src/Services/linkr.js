@@ -93,6 +93,14 @@ function listPostsAfterId(id) {
 	return promise;
 }
 
+function repost(id) {
+	const config = createHeaders();
+
+	const promise = axios.post(`${API_URL}/posts/${id}/share`, {}, config);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -104,4 +112,5 @@ export {
 	listPostsWithHashtag,
 	listPostsId,
 	listPostsAfterId,
+	repost,
 };

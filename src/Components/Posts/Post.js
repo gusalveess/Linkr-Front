@@ -3,17 +3,20 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ReactHashtag from "@mdnm/react-hashtag";
+
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
+import { CgRepeat as RepostedIcon } from "react-icons/cg";
 import { IoMdHeartEmpty } from "react-icons/io"; //ESSE
 import { AiFillHeart } from "react-icons/ai";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
-import DeleteModal from "../Common/Modal";
+import Modal from "../Common/Modal";
 
 export default function Post({ post, update, setUpdate }) {
 	const [description, setDescription] = useState(post.description);
+	const [modalData, setModalData] = useState({});
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [disabled, setDisabled] = useState(true);
@@ -36,6 +39,29 @@ export default function Post({ post, update, setUpdate }) {
 		setDescription(post.description);
 	}, [post.description]);
 
+	function callModal(type) {
+		if (type === "delete") {
+			setModalIsOpen(true);
+
+			setModalData({
+				textAction: "Are you sure you want to delete this post?",
+				textCancel: "No, go back",
+				textConfirm: "Yes, delete it",
+				functionConfirm: deletePostFunction,
+			});
+		}
+		if (type === "share") {
+			setModalIsOpen(true);
+
+			setModalData({
+				textAction: "Do you want to re-post this link?",
+				textCancel: "No, cancel",
+				textConfirm: "Yes, share!",
+				functionConfirm: sharePost,
+			});
+		}
+	}
+
 	function deletePostFunction() {
 		setIsLoading(true);
 
@@ -50,6 +76,31 @@ export default function Post({ post, update, setUpdate }) {
 				message: {
 					type: "error",
 					text: "Não foi possível apagar o post.",
+				},
+			});
+		});
+
+		promise.then(() => {
+			setModalIsOpen(false);
+			setIsLoading(false);
+			setUpdate(!update);
+		});
+	}
+
+	function sharePost() {
+		setIsLoading(true);
+
+		const promise = service.repost(post.id);
+
+		promise.catch(() => {
+			setModalIsOpen(false);
+			setIsLoading(false);
+
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Não foi possível compartilhar o post.",
 				},
 			});
 		});
@@ -115,37 +166,61 @@ export default function Post({ post, update, setUpdate }) {
 	}
 
 	return (
-		<>
-			<DeleteModal
+		<Wrapper reposted={!!post.repostedBy}>
+			<Modal
 				modalIsOpen={modalIsOpen}
 				setModalIsOpen={setModalIsOpen}
-				isLoading={isLoading}
-				textAction="Are you sure you want to delete this post?"
-				textCancel="No, go back"
-				textConfirm="Yes, delete it"
-				functionConfirm={deletePostFunction}
+				isLoading={modalData.isLoading}
+				textAction={modalData.textAction}
+				textCancel={modalData.textCancel}
+				textConfirm={modalData.textConfirm}
+				functionConfirm={modalData.functionConfirm}
 			/>
 
-			<Wrapper>
+			{post.repostedBy ? (
+				<Reposted>
+					<RepostedIcon size={30} />
+
+					<span>
+						Re-posted by
+						<b>{post.repostedByUser ? " you" : ` ${post.repostedBy}`}</b>
+					</span>
+				</Reposted>
+			) : (
+				""
+			)}
+
+			<PostWrapper>
 				<User>
 					<Link to={`/user/${post.userId}`}>
 						<img src={post.userImage} alt="user" />
 					</Link>
-					{like ? (
+
+					<div>
+						{like ? (
+							<h3>
+								<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+							</h3>
+						) : (
+							<h3>
+								<AiFillHeart
+									size="30px"
+									color="red"
+									onClick={() => setLike(true)}
+								/>
+							</h3>
+						)}{" "}
+						{/*/////////////////////////////////////////////////// */}
+						<h4>{post.likesTotal} likes</h4>
+					</div>
+
+					<div>
 						<h3>
-							<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+							<RepostedIcon size={30} onClick={() => callModal("share")} />
 						</h3>
-					) : (
-						<h3>
-							<AiFillHeart
-								size="30px"
-								color="red"
-								onClick={() => setLike(true)}
-							/>
-						</h3>
-					)}{" "}
-					{/*/////////////////////////////////////////////////// */}
-					<h4>0 likes</h4>
+
+						<h4>{post.shareds} re-post</h4>
+					</div>
 				</User>
 
 				<PostData>
@@ -158,7 +233,7 @@ export default function Post({ post, update, setUpdate }) {
 							{post.owner ? (
 								<>
 									<EditIcon size="20px" onClick={editDescription} />
-									<TrashIcon size="15px" onClick={() => setModalIsOpen(true)} />
+									<TrashIcon size="15px" onClick={() => callModal("delete")} />
 								</>
 							) : (
 								""
@@ -207,12 +282,40 @@ export default function Post({ post, update, setUpdate }) {
 						""
 					)}
 				</PostData>
-			</Wrapper>
-		</>
+			</PostWrapper>
+		</Wrapper>
 	);
 }
 
 const Wrapper = styled.div`
+	position: relative;
+	padding: ${(props) => (props.reposted ? "37px 0 0 0" : "0")};
+`;
+
+const Reposted = styled.div`
+	&& {
+		width: 100%;
+		height: 50px;
+		padding: 10px 13px 19px;
+		border-radius: 15px 15px 0 0;
+		background-color: #1e1e1e;
+		position: absolute;
+		top: 0;
+		z-index: -1;
+
+		display: flex;
+		align-items: center;
+
+		span {
+			width: 100%;
+			height: fit-content;
+			font-size: 12px;
+			overflow: hidden;
+		}
+	}
+`;
+
+const PostWrapper = styled.div`
 	width: 100%;
 	height: auto;
 	display: flex;
@@ -255,9 +358,14 @@ const User = styled.div`
 
 	/////////////////////////////////////
 	h3 {
-		margin-left: 10px;
 		margin-top: 10px;
+		text-align: center;
+
+		svg {
+			cursor: pointer;
+		}
 	}
+
 	h4 {
 		font-family: "Lato", sans-serif;
 		font-size: 11px;
