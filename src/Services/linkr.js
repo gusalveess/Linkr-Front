@@ -26,6 +26,14 @@ function signUp(body) {
 	return promise;
 }
 
+function logout() {
+	const config = createHeaders();
+
+	const promise = axios.post(`${API_URL}/logout`, {}, config);
+
+	return promise;
+}
+
 function createPost(body) {
 	const config = createHeaders();
 
@@ -113,4 +121,5 @@ export {
 	listPostsId,
 	listPostsAfterId,
 	repost,
+	logout,
 };

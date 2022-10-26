@@ -50,6 +50,7 @@ export default function Post({ post, update, setUpdate }) {
 				functionConfirm: deletePostFunction,
 			});
 		}
+
 		if (type === "share") {
 			setModalIsOpen(true);
 
@@ -170,7 +171,7 @@ export default function Post({ post, update, setUpdate }) {
 			<Modal
 				modalIsOpen={modalIsOpen}
 				setModalIsOpen={setModalIsOpen}
-				isLoading={modalData.isLoading}
+				isLoading={isLoading}
 				textAction={modalData.textAction}
 				textCancel={modalData.textCancel}
 				textConfirm={modalData.textConfirm}
