@@ -3,27 +3,44 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlineSearch, AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { useMessage } from "../../Contexts/messageContext";
+import * as service from "../../Services/linkr";
 
 export default function Header() {
 	const [search, setSearch] = useState("");
 	const [click, setClick] = useState(false);
 
-	let user = JSON.parse(localStorage.getItem("linkr"));
+	const { setMessage } = useMessage();
 	const navigate = useNavigate();
 
-	const img = user.userImage;
-	//console.log(search)
-	const v = { color: "white", fontSize: "1.5em" };
+	let user = JSON.parse(localStorage.getItem("linkr"));
+
+	const arrowStyle = { color: "white", fontSize: "1.5em" };
 
 	function logoutFunction() {
-		localStorage.removeItem("linkr");
-		navigate("/");
+		const promise = service.logout();
+
+		promise.catch(() => {
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Não foi possível fazer logout.",
+				},
+			});
+		});
+
+		promise.then(() => {
+			localStorage.removeItem("linkr");
+			navigate("/");
+		});
 	}
 
 	return (
 		<>
 			<Top>
 				<h1>Linkr</h1>
+
 				<SearchBar>
 					<input
 						type="text"
@@ -31,21 +48,39 @@ export default function Header() {
 						defaultValue={search}
 						onChange={(e) => setSearch(e.target.value)}
 					/>
+
 					<AiOutlineSearch />
 				</SearchBar>
+
 				<Container>
 					<ScreenUser>
 						{click ? (
-							<AiOutlineDown onClick={() => setClick(false)} style={v} />
+							<AiOutlineDown
+								onClick={() => setClick(!click)}
+								style={arrowStyle}
+							/>
 						) : (
-							<AiOutlineUp style={v} onClick={() => setClick(true)} />
+							<AiOutlineUp
+								style={arrowStyle}
+								onClick={() => setClick(!click)}
+							/>
 						)}
-						<img src={img} />
+
+						<img
+							src={user?.userImage}
+							alt="user"
+							onClick={() => setClick(!click)}
+						/>
 					</ScreenUser>
+
 					{click ? (
-						<Logout onClick={logoutFunction}>
-							<h1>Logout</h1>
-						</Logout>
+						<>
+							<CloseLogout onClick={() => setClick(!click)}></CloseLogout>
+
+							<Logout onClick={logoutFunction}>
+								<h1>Logout</h1>
+							</Logout>
+						</>
 					) : (
 						<></>
 					)}
@@ -111,12 +146,18 @@ const ScreenUser = styled.div`
 		height: 50px;
 		object-fit: cover;
 		border-radius: 40px;
+		cursor: pointer;
+	}
+
+	svg {
+		cursor: pointer;
 	}
 `;
 
 const Container = styled.div`
 	display: inline;
 	margin-top: 50px;
+	position: relative;
 
 	h1 {
 		display: flex;
@@ -128,13 +169,27 @@ const Container = styled.div`
 		font-size: 17px;
 	}
 `;
+
+const CloseLogout = styled.div`
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 2;
+`;
+
 const Logout = styled.div`
 	display: flex;
 	justify-content: center;
+	position: absolute;
+	top: 36px;
+	z-index: 3;
 
 	width: 100%;
 	height: 47px;
 
 	background-color: #151515;
 	border-bottom-left-radius: 15px;
+	cursor: pointer;
 `;
