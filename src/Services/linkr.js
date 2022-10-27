@@ -109,6 +109,14 @@ function repost(id) {
 	return promise;
 }
 
+function like(id) {
+	const config = createHeaders();
+
+	const promise = axios.post(`${API_URL}/posts/${id}/like`, {}, config);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -122,4 +130,5 @@ export {
 	listPostsAfterId,
 	repost,
 	logout,
+	like,
 };
