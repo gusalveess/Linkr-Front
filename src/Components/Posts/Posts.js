@@ -12,7 +12,7 @@ export default function Posts({
 	posts,
 	listMorePosts,
 	hasMorePosts,
-	text = "There are no posts yet"
+	text = "There are no posts yet",
 }) {
 	return (
 		<Container>
@@ -53,7 +53,7 @@ const Container = styled.section`
 	margin: 0 auto;
 
 	span {
-		height: 40px;
+		height: auto;
 		font-size: 20px;
 		color: #ffffff;
 		margin: auto;

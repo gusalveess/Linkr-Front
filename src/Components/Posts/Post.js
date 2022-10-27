@@ -4,15 +4,36 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ReactHashtag from "@mdnm/react-hashtag";
 
+import ReactTooltip from "react-tooltip";
+
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { CgRepeat as RepostedIcon } from "react-icons/cg";
-import { IoMdHeartEmpty } from "react-icons/io"; //ESSE
-import { AiFillHeart } from "react-icons/ai";
+import {
+	IoMdHeartEmpty as UnlikedIcon,
+	IoMdHeart as LikedIcon,
+} from "react-icons/io";
 
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
 import Modal from "../Common/Modal";
+
+function getLikedBy(post) {
+	if (post.likedByUser && post.likedBy.length === 0) {
+		return "Você";
+	} else if (post.likedByUser && post.likedBy.length === 1) {
+		return `Você e ${post.likedBy}`;
+	} else if (post.likedByUser) {
+		return `Você, ${post.likedBy[0]} e outras ${post.length - 2} pessoas`;
+	} else if (post.likedBy.length === 0) {
+		return `ninguém ainda, que tal ser o primeiro?`;
+	} else if (post.likedBy.length === 1) {
+		return `${post.likedBy[0]}`;
+	}
+	return `${post.likedBy[0]}, ${post.likedBy[1]} e outras ${
+		post.length - 2
+	} pessoas`;
+}
 
 export default function Post({ post, update, setUpdate }) {
 	const [description, setDescription] = useState(post.description);
@@ -21,13 +42,14 @@ export default function Post({ post, update, setUpdate }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [disabled, setDisabled] = useState(true);
 	const [linkData, setLinkData] = useState({});
-	const [like, setLike] = useState(true);
 
 	const { setMessage } = useMessage();
 
 	const editRef = useRef();
 
 	const heart = { color: "white", fontSize: "1.5em" };
+
+	const likedByUsers = getLikedBy(post);
 
 	useEffect(() => {
 		const promise = axios.get(`https://api.microlink.io/?url=${post.url}`);
@@ -113,6 +135,26 @@ export default function Post({ post, update, setUpdate }) {
 		});
 	}
 
+	function likePost() {
+		const promise = service.like(post.id);
+
+		promise.catch(() => {
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: !post.likedByUser
+						? "Não foi possível descurtir o post."
+						: "Não foi possível curtir o post.",
+				},
+			});
+		});
+
+		promise.then(() => {
+			setUpdate(!update);
+		});
+	}
+
 	function editPost() {
 		setDisabled(true);
 
@@ -168,6 +210,8 @@ export default function Post({ post, update, setUpdate }) {
 
 	return (
 		<Wrapper reposted={!!post.repostedBy}>
+			<ReactTooltip />
+
 			<Modal
 				modalIsOpen={modalIsOpen}
 				setModalIsOpen={setModalIsOpen}
@@ -198,21 +242,24 @@ export default function Post({ post, update, setUpdate }) {
 					</Link>
 
 					<div>
-						{like ? (
+						{post.likedByUser ? (
 							<h3>
-								<IoMdHeartEmpty size="30px" onClick={() => setLike(false)} />
+								<LikedIcon size="30px" color="red" onClick={likePost} />
 							</h3>
 						) : (
 							<h3>
-								<AiFillHeart
-									size="30px"
-									color="red"
-									onClick={() => setLike(true)}
-								/>
+								<UnlikedIcon size="30px" onClick={likePost} />
 							</h3>
-						)}{" "}
-						{/*/////////////////////////////////////////////////// */}
-						<h4>{post.likesTotal} likes</h4>
+						)}
+						<h4
+							data-tip={likedByUsers}
+							data-place="bottom"
+							data-type="light"
+							data-background-color="rgba(255, 255, 255, 0.8)"
+							data-text-color="#505050"
+						>
+							{post.likesTotal} likes
+						</h4>
 					</div>
 
 					<div>
@@ -357,7 +404,6 @@ const User = styled.div`
 	align-items: center;
 	margin: 0 10px 0 0;
 
-	/////////////////////////////////////
 	h3 {
 		margin-top: 10px;
 		text-align: center;
@@ -370,8 +416,9 @@ const User = styled.div`
 	h4 {
 		font-family: "Lato", sans-serif;
 		font-size: 11px;
+		position: relative;
+		cursor: default;
 	}
-	/////////////////////////////////////
 
 	img {
 		width: 50px;
