@@ -85,10 +85,13 @@ function listPostsWithHashtag(hashtag, page) {
 	return promise;
 }
 
-function listPostsId(id, page) {
+function listPostsFromUser(id, page) {
 	const config = createHeaders();
 
-	const promise = axios.get(`${API_URL}/user/${id}/?page=${page}`, config);
+	const promise = axios.get(
+		`${API_URL}/user/${id}/posts/?page=${page}`,
+		config
+	);
 
 	return promise;
 }
@@ -117,6 +120,14 @@ function like(id) {
 	return promise;
 }
 
+function follow(id) {
+	const config = createHeaders();
+
+	const promise = axios.post(`${API_URL}/users/${id}/follow`, {}, config);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -126,9 +137,10 @@ export {
 	editPost,
 	listHashtags,
 	listPostsWithHashtag,
-	listPostsId,
+	listPostsFromUser,
 	listPostsAfterId,
 	repost,
 	logout,
 	like,
+	follow,
 };
