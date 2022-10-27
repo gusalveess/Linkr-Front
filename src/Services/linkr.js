@@ -128,6 +128,18 @@ function follow(id) {
 	return promise;
 }
 
+function postComment({ id, comment }) {
+	const config = createHeaders();
+
+	const promise = axios.post(
+		`${API_URL}/posts/${id}/comment`,
+		{ comment },
+		config
+	);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -143,4 +155,5 @@ export {
 	logout,
 	like,
 	follow,
+	postComment,
 };
