@@ -158,7 +158,7 @@ const Top = styled.div`
 	height: 72px;
 	background-color: #151515;
 
-	& > a {
+	& > a, h1 {
 		font-family: "Passion One", cursive;
 		font-weight: 700;
 		color: #fff;
@@ -166,7 +166,7 @@ const Top = styled.div`
 	}
 
 	@media(max-width: 611px) {
-		& > a {
+		& > a, h1 {
 			font-size: 45px;
 		}
 	}
