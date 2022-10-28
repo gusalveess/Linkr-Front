@@ -6,6 +6,7 @@ import ReactHashtag from "@mdnm/react-hashtag";
 
 import ReactTooltip from "react-tooltip";
 
+import { AiOutlineComment as CommentIcon } from "react-icons/ai";
 import { TiPencil as EditIcon } from "react-icons/ti";
 import { FaTrash as TrashIcon } from "react-icons/fa";
 import { CgRepeat as RepostedIcon } from "react-icons/cg";
@@ -17,6 +18,7 @@ import {
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
 import Modal from "../Common/Modal";
+import CommentsSection from "./Comments/CommentsSection";
 
 function getLikedBy(post) {
 	if (post.likedByUser && post.likedBy.length === 0) {
@@ -40,14 +42,13 @@ export default function Post({ post, update, setUpdate }) {
 	const [modalData, setModalData] = useState({});
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [seeComments, setSeeComments] = useState(false);
 	const [disabled, setDisabled] = useState(true);
 	const [linkData, setLinkData] = useState({});
 
 	const { setMessage } = useMessage();
 
 	const editRef = useRef();
-
-	const heart = { color: "white", fontSize: "1.5em" };
 
 	const likedByUsers = getLikedBy(post);
 
@@ -209,18 +210,8 @@ export default function Post({ post, update, setUpdate }) {
 	}
 
 	return (
-		<Wrapper reposted={!!post.repostedBy}>
+		<>
 			<ReactTooltip />
-
-			<Modal
-				modalIsOpen={modalIsOpen}
-				setModalIsOpen={setModalIsOpen}
-				isLoading={isLoading}
-				textAction={modalData.textAction}
-				textCancel={modalData.textCancel}
-				textConfirm={modalData.textConfirm}
-				functionConfirm={modalData.functionConfirm}
-			/>
 
 			{post.repostedBy ? (
 				<Reposted>
@@ -235,7 +226,7 @@ export default function Post({ post, update, setUpdate }) {
 				""
 			)}
 
-			<PostWrapper>
+			<PostWrapper comments={seeComments}>
 				<User>
 					<Link to={`/user/${post.userId}`}>
 						<img src={post.userImage} alt="user" />
@@ -244,18 +235,18 @@ export default function Post({ post, update, setUpdate }) {
 					<div>
 						{post.likedByUser ? (
 							<h3>
-								<LikedIcon size="30px" color="red" onClick={likePost} />
+								<LikedIcon size="22px" color="red" onClick={likePost} />
 							</h3>
 						) : (
 							<h3>
-								<UnlikedIcon size="30px" onClick={likePost} />
+								<UnlikedIcon size="22px" onClick={likePost} />
 							</h3>
 						)}
 						<h4
 							data-tip={likedByUsers}
 							data-place="bottom"
 							data-type="light"
-							data-background-color="rgba(255, 255, 255, 0.8)"
+							data-background-color="rgba(255, 255, 255, 0.9)"
 							data-text-color="#505050"
 						>
 							{post.likesTotal} likes
@@ -264,7 +255,18 @@ export default function Post({ post, update, setUpdate }) {
 
 					<div>
 						<h3>
-							<RepostedIcon size={30} onClick={() => callModal("share")} />
+							<CommentIcon
+								size={22}
+								onClick={() => setSeeComments(!seeComments)}
+							/>
+						</h3>
+
+						<h4>{post.comments} comments</h4>
+					</div>
+
+					<div>
+						<h3>
+							<RepostedIcon size={28} onClick={() => callModal("share")} />
 						</h3>
 
 						<h4>{post.shareds} re-post</h4>
@@ -331,37 +333,21 @@ export default function Post({ post, update, setUpdate }) {
 					)}
 				</PostData>
 			</PostWrapper>
-		</Wrapper>
+
+			{seeComments ? <CommentsSection postId={post.id} /> : ""}
+
+			<Modal
+				modalIsOpen={modalIsOpen}
+				setModalIsOpen={setModalIsOpen}
+				isLoading={isLoading}
+				textAction={modalData.textAction}
+				textCancel={modalData.textCancel}
+				textConfirm={modalData.textConfirm}
+				functionConfirm={modalData.functionConfirm}
+			/>
+		</>
 	);
 }
-
-const Wrapper = styled.div`
-	position: relative;
-	padding: ${(props) => (props.reposted ? "37px 0 0 0" : "0")};
-`;
-
-const Reposted = styled.div`
-	&& {
-		width: 100%;
-		height: 50px;
-		padding: 10px 13px 19px;
-		border-radius: 15px 15px 0 0;
-		background-color: #1e1e1e;
-		position: absolute;
-		top: 0;
-		z-index: -1;
-
-		display: flex;
-		align-items: center;
-
-		span {
-			width: 100%;
-			height: fit-content;
-			font-size: 12px;
-			overflow: hidden;
-		}
-	}
-`;
 
 const PostWrapper = styled.div`
 	width: 100%;
@@ -371,11 +357,13 @@ const PostWrapper = styled.div`
 	background-color: #171717;
 	border-radius: 15px;
 	padding: 18px;
-	margin: 0 0 16px 0;
+	margin: ${(props) => (props.comments ? "0" : "0 0 16px 0")};
 	color: #ffffff;
 	font-weight: 400;
 	font-size: 17px;
 	overflow: hidden;
+	position: relative;
+	z-index: 1;
 
 	h2 {
 		height: 24px;
@@ -396,12 +384,34 @@ const PostWrapper = styled.div`
 	}
 `;
 
+const Reposted = styled.div`
+	&& {
+		width: 100%;
+		height: 50px;
+		padding: 10px 13px 19px;
+		border-radius: 15px 15px 0 0;
+		background-color: #1e1e1e;
+		transform: translateY(10px);
+
+		display: flex;
+		align-items: center;
+
+		span {
+			width: 100%;
+			height: fit-content;
+			font-size: 12px;
+			overflow: hidden;
+		}
+	}
+`;
+
 const User = styled.div`
 	width: fit-content;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	text-align: center;
 	margin: 0 10px 0 0;
 
 	h3 {

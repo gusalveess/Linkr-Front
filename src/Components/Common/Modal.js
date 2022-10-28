@@ -14,7 +14,11 @@ export default function Modal({
 	functionConfirm,
 }) {
 	return (
-		<Wrapper isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+		<Wrapper
+			isOpen={modalIsOpen}
+			onRequestClose={() => setModalIsOpen(false)}
+			style={{ overlay: { zIndex: 5 } }}
+		>
 			{isLoading ? (
 				<Loading color="#FFFFFF" height={13} width={51} />
 			) : (
@@ -62,6 +66,10 @@ const Wrapper = styled(ReactModal)`
 			max-width: 338px;
 			align-items: flex-start;
 		}
+	}
+
+	svg {
+		margin: 50px auto;
 	}
 `;
 
