@@ -26,14 +26,18 @@ export default function Posts({
 						hasMore={hasMorePosts}
 						loader={<LoadingSpinnerText text="Loading more posts..." />}
 					>
-						{posts.map((post, index) => (
-							<Post
-								key={index}
-								post={post}
-								update={update}
-								setUpdate={setUpdate}
-							/>
-						))}
+						{posts[0].url ? (
+							posts.map((post, index) => (
+								<Post
+									key={index}
+									post={post}
+									update={update}
+									setUpdate={setUpdate}
+								/>
+							))
+						) : (
+							<span>{text}</span>
+						)}
 					</InfiniteScroll>
 				)
 			) : (

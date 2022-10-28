@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { Oval as LoaderSpinner } from "react-loader-spinner";
 
-export default function LoadingSpinnerText({ text }) {
+export default function LoadingSpinner({ size = 36 }) {
 	return (
 		<Wrapper>
 			<LoaderSpinner
-				height={36}
-				width={36}
+				height={size}
+				width={size}
 				color="#6D6D6D"
 				wrapperStyle={{}}
 				wrapperClass=""
@@ -16,8 +16,6 @@ export default function LoadingSpinnerText({ text }) {
 				strokeWidth={2}
 				strokeWidthSecondary={2}
 			/>
-
-			<span key={0}>{text}</span>
 		</Wrapper>
 	);
 }
@@ -25,17 +23,6 @@ export default function LoadingSpinnerText({ text }) {
 const Wrapper = styled.div`
 	&& {
 		width: fit-content;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: #6d6d6d;
-		margin: 80px auto 0;
-
-		span {
-			width: fit-content;
-			font-size: 20px;
-			color: #6d6d6d;
-			margin: 16px auto 0;
-		}
+		margin: 20px auto;
 	}
 `;

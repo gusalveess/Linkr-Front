@@ -50,8 +50,6 @@ export default function Post({ post, update, setUpdate }) {
 
 	const editRef = useRef();
 
-	const heart = { color: "white", fontSize: "1.5em" };
-
 	const likedByUsers = getLikedBy(post);
 
 	useEffect(() => {
@@ -215,16 +213,6 @@ export default function Post({ post, update, setUpdate }) {
 		<>
 			<ReactTooltip />
 
-			<Modal
-				modalIsOpen={modalIsOpen}
-				setModalIsOpen={setModalIsOpen}
-				isLoading={isLoading}
-				textAction={modalData.textAction}
-				textCancel={modalData.textCancel}
-				textConfirm={modalData.textConfirm}
-				functionConfirm={modalData.functionConfirm}
-			/>
-
 			{post.repostedBy ? (
 				<Reposted>
 					<RepostedIcon size={30} />
@@ -347,9 +335,54 @@ export default function Post({ post, update, setUpdate }) {
 			</PostWrapper>
 
 			{seeComments ? <CommentsSection postId={post.id} /> : ""}
+
+			<Modal
+				modalIsOpen={modalIsOpen}
+				setModalIsOpen={setModalIsOpen}
+				isLoading={isLoading}
+				textAction={modalData.textAction}
+				textCancel={modalData.textCancel}
+				textConfirm={modalData.textConfirm}
+				functionConfirm={modalData.functionConfirm}
+			/>
 		</>
 	);
 }
+
+const PostWrapper = styled.div`
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: row;
+	background-color: #171717;
+	border-radius: 15px;
+	padding: 18px;
+	margin: ${(props) => (props.comments ? "0" : "0 0 16px 0")};
+	color: #ffffff;
+	font-weight: 400;
+	font-size: 17px;
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+
+	h2 {
+		height: 24px;
+		font-size: 19px;
+	}
+
+	a {
+		color: #ffffff;
+		font-weight: 700;
+	}
+
+	@media (max-width: 611px) {
+		border-radius: 0;
+
+		h2 {
+			font-size: 17px;
+		}
+	}
+`;
 
 const Reposted = styled.div`
 	&& {
@@ -368,41 +401,6 @@ const Reposted = styled.div`
 			height: fit-content;
 			font-size: 12px;
 			overflow: hidden;
-		}
-	}
-`;
-
-const PostWrapper = styled.div`
-	width: 100%;
-	height: auto;
-	display: flex;
-	flex-direction: row;
-	background-color: #171717;
-	border-radius: 15px;
-	padding: 18px;
-	margin: ${(props) => (props.comments ? "0" : "0 0 16px 0")};
-	color: #ffffff;
-	font-weight: 400;
-	font-size: 17px;
-	overflow: hidden;
-	position: sticky;
-	z-index: 1;
-
-	h2 {
-		height: 24px;
-		font-size: 19px;
-	}
-
-	a {
-		color: #ffffff;
-		font-weight: 700;
-	}
-
-	@media (max-width: 611px) {
-		border-radius: 0;
-
-		h2 {
-			font-size: 17px;
 		}
 	}
 `;

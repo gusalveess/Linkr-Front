@@ -17,7 +17,7 @@ export default function PostsUser() {
 	const [disabled, setDisabled] = useState(false);
 	const [posts, setPosts] = useState(false);
 	const { setMessage } = useMessage();
-
+	console.log(posts);
 	useEffect(() => {
 		const promise = service.listPostsFromUser(id, 0);
 

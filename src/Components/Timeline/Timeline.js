@@ -145,7 +145,7 @@ const Text = styled.span`
 	height: 40px;
 	font-size: 20px;
 	color: #ffffff;
-	margin: auto;
+	margin: 0 auto;
 `;
 
 const NewPosts = styled.button`

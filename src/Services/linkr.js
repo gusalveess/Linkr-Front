@@ -140,6 +140,14 @@ function postComment({ id, comment }) {
 	return promise;
 }
 
+function listComments(id) {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/posts/${id}/comment`, config);
+
+	return promise;
+}
+
 export {
 	signIn,
 	signUp,
@@ -156,4 +164,5 @@ export {
 	like,
 	follow,
 	postComment,
+	listComments,
 };

@@ -34,6 +34,7 @@ export default function CreateComment({ postId, setUpdate, update }) {
 		});
 
 		promise.then(() => {
+			setNewComment("");
 			setDisabled(false);
 			setUpdate(!update);
 		});
@@ -71,7 +72,7 @@ export default function CreateComment({ postId, setUpdate, update }) {
 const Wrapper = styled.div`
 	width: 100%;
 	height: auto;
-	margin: 16px 0 0;
+	margin: 20px 0 0;
 	display: flex;
 
 	img {
