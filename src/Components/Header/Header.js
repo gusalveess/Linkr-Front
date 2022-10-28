@@ -2,13 +2,17 @@ import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import { DebounceInput } from "react-debounce-input";
 import { AiOutlineSearch, AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { useMessage } from "../../Contexts/messageContext";
 import * as service from "../../Services/linkr";
+import LoadingSpinner from "../Common/LoadingSpinner";
 
 export default function Header() {
+	const [users, setUsers] = useState([]);
 	const [search, setSearch] = useState("");
 	const [click, setClick] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { setMessage } = useMessage();
 	const navigate = useNavigate();
@@ -16,6 +20,30 @@ export default function Header() {
 	let user = JSON.parse(localStorage.getItem("linkr"));
 
 	const arrowStyle = { color: "white", fontSize: "1.5em" };
+
+	function searchUser(search) {
+		setIsLoading(true);
+		setSearch(search);
+
+		const promise = service.listComments(83);
+
+		promise.catch(() => {
+			setIsLoading(false);
+
+			setMessage({
+				type: "alert",
+				message: {
+					type: "error",
+					text: "Não foi possível buscar usuários da platarfoma.",
+				},
+			});
+		});
+
+		promise.then(({ data }) => {
+			setIsLoading(false);
+			setUsers(data);
+		});
+	}
 
 	function logoutFunction() {
 		const promise = service.logout();
@@ -36,21 +64,44 @@ export default function Header() {
 		});
 	}
 
+	function seeUser(id) {
+		setSearch("");
+		navigate(`/user/${id}`);
+	}
+
 	return (
 		<>
 			<Top>
 				<h1>Linkr</h1>
 
-				<SearchBar>
-					<input
-						type="text"
-						placeholder="Search for people"
-						defaultValue={search}
-						onChange={(e) => setSearch(e.target.value)}
-					/>
+				<Search>
+					<SearchBar>
+						<DebounceInput
+							minLength={3}
+							debounceTimeout={300}
+							onChange={(e) => searchUser(e.target.value)}
+							type="text"
+							placeholder="Search for people"
+						/>
 
-					<AiOutlineSearch />
-				</SearchBar>
+						<AiOutlineSearch size={24} color="#C6C6C6" />
+					</SearchBar>
+
+					<Users search={!!search}>
+						{isLoading ? (
+							<LoadingSpinner />
+						) : users.length === 0 ? (
+							<span>"Nenhum usuário encontrado"</span>
+						) : (
+							users.map(({ username, picture, userId }, index) => (
+								<User key={index} onClick={() => seeUser(userId)}>
+									<img src={picture} alt="user" />
+									<span>{username}</span>
+								</User>
+							))
+						)}
+					</Users>
+				</Search>
 
 				<Container>
 					<ScreenUser>
@@ -108,36 +159,12 @@ const Top = styled.div`
 	}
 `;
 
-const SearchBar = styled.div`
-	width: 35%;
-	height: 60%;
-	background-color: #ffffff;
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-left: 10px;
-	padding-right: 10px;
-
-	input {
-		border: none;
-		font-family: "Lato";
-		font-size: 19px;
-	}
-
-	textarea:focus,
-	input:focus {
-		box-shadow: 0 0 0 0;
-		outline: 0;
-	}
-`;
 const ScreenUser = styled.div`
 	display: flex;
 	height: 50px;
 	right: 20px;
 	bottom: 20px;
 	position: relative;
-
 	align-items: center;
 
 	img {
@@ -184,7 +211,7 @@ const Logout = styled.div`
 	justify-content: center;
 	position: absolute;
 	top: 36px;
-	z-index: 3;
+	z-index: 6;
 
 	width: 100%;
 	height: 47px;
@@ -192,4 +219,93 @@ const Logout = styled.div`
 	background-color: #151515;
 	border-bottom-left-radius: 15px;
 	cursor: pointer;
+`;
+
+const Search = styled.div`
+	width: 35%;
+	height: 45px;
+`;
+
+const SearchBar = styled.div`
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 4;
+
+	input {
+		width: 100%;
+		height: 100%;
+		background-color: #ffffff;
+		border-radius: 8px;
+		border: none;
+		padding: 0 30px 0 14px;
+		font-family: "Lato";
+		font-size: 19px;
+		color: #707070;
+	}
+
+	input::placeholder {
+		font-family: "Lato";
+		font-size: 19px;
+		color: #c6c6c6;
+	}
+
+	input:focus {
+		box-shadow: 0 0 0 0;
+		outline: 0;
+	}
+
+	svg {
+		position: absolute;
+		right: 10px;
+		top: 10px;
+	}
+`;
+
+const Users = styled.div`
+	width: 100%;
+	height: auto;
+	padding: 20px 0;
+	margin: 0;
+	display: ${(props) => (props.search ? "inherit" : "none")};
+	border-radius: 0 0 8px 8px;
+	background-color: #e7e7e7;
+	transform: translateY(-10px);
+	position: relative;
+	z-index: 3;
+	text-align: center;
+
+	& > span {
+		font-family: "Lato";
+		font-size: 16px;
+		color: #515151;
+	}
+`;
+
+const User = styled.div`
+	width: 100%;
+	height: 50px;
+	display: flex;
+	padding: 0 20px;
+	align-items: center;
+	background-color: #e7e7e7;
+	font-family: "Lato";
+	font-size: 19px;
+	color: #515151;
+	cursor: default;
+
+	img {
+		width: 39px;
+		height: 39px;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+
+	span {
+		margin: 0 0 0 12px;
+	}
+
+	&:hover {
+		filter: brightness(0.9);
+	}
 `;

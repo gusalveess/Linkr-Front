@@ -57,6 +57,7 @@ const Wrapper = styled.div`
 			span {
 				font-size: 14px;
 				color: #565656;
+
 				a {
 					color: #f3f3f3;
 				}
