@@ -138,6 +138,7 @@ const User = styled.div`
 		background-color: ${(props) => (props.followed ? "#ffffff" : "#1877F2")};
 		border: none;
 		border-radius: 5px;
+		margin: 0 0 0 15px;
 		color: ${(props) => (props.followed ? "#1877F2" : "#ffffff")};
 		font-size: 14px;
 		font-weight: 700;
@@ -148,5 +149,16 @@ const User = styled.div`
 	button:hover,
 	button:disabled {
 		filter: brightness(0.7);
+	}
+
+	@media (max-width: 611px) {
+		&& {
+			width: 90%;
+			margin: 10px auto 30px;
+
+			h1 {
+				font-size: 33px;
+			}
+		}
 	}
 `;

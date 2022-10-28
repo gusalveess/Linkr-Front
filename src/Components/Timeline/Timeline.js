@@ -145,7 +145,14 @@ const Text = styled.span`
 	height: 40px;
 	font-size: 20px;
 	color: #ffffff;
+	text-align: center;
 	margin: 0 auto;
+
+	@media (max-width: 611px) {
+		width: 100%;
+		height: auto;
+		margin: 15px 0 10px;
+	}
 `;
 
 const NewPosts = styled.button`

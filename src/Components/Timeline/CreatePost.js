@@ -126,6 +126,7 @@ const Container = styled.div`
 
 	@media (max-width: 611px) {
 		border-radius: 0;
+		margin: 0 auto;
 
 		div {
 			display: none;
@@ -189,6 +190,7 @@ const Form = styled.form`
 		h2 {
 			font-size: 17px;
 			align-self: center;
+			text-align: center;
 		}
 
 		input,
