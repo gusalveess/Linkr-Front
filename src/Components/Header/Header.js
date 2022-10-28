@@ -25,24 +25,27 @@ export default function Header() {
 		setIsLoading(true);
 		setSearch(search);
 
-		const promise = service.listComments(83);
+		if (search.length >= 3) {	
 
-		promise.catch(() => {
-			setIsLoading(false);
+			const promise = service.listUsers(search);
 
-			setMessage({
-				type: "alert",
-				message: {
-					type: "error",
-					text: "Não foi possível buscar usuários da platarfoma.",
-				},
+			promise.catch(() => {
+				setIsLoading(false);
+
+				setMessage({
+					type: "alert",
+					message: {
+						type: "error",
+						text: "Não foi possível buscar usuários da platarfoma.",
+					},
+				});
 			});
-		});
 
-		promise.then(({ data }) => {
-			setIsLoading(false);
-			setUsers(data);
-		});
+			promise.then(({ data }) => {
+				setIsLoading(false);
+				setUsers(data);
+			});
+		}
 	}
 
 	function logoutFunction() {
@@ -93,10 +96,14 @@ export default function Header() {
 						) : users.length === 0 ? (
 							<span>"Nenhum usuário encontrado"</span>
 						) : (
-							users.map(({ username, picture, userId }, index) => (
+							users.map(({ username, picture, userId, followedByUser }, index) => (
 								<User key={index} onClick={() => seeUser(userId)}>
 									<img src={picture} alt="user" />
-									<span>{username}</span>
+
+									<span>
+										{username}
+										<em>{followedByUser ? " • following" : ""}</em>
+									</span>
 								</User>
 							))
 						)}
@@ -265,6 +272,7 @@ const SearchBar = styled.div`
 const Users = styled.div`
 	width: 100%;
 	height: auto;
+	max-height: 300px;
 	padding: 20px 0;
 	margin: 0;
 	display: ${(props) => (props.search ? "inherit" : "none")};
@@ -274,11 +282,33 @@ const Users = styled.div`
 	position: relative;
 	z-index: 3;
 	text-align: center;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
 	& > span {
 		font-family: "Lato";
 		font-size: 16px;
 		color: #515151;
+	}
+
+	&::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	&::-webkit-scrollbar-track {
+		width: 5px;
+		border-radius: 3px;
+		background-color: transparent;=
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 3px;
+		background-color: #acacac;
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background-color: #acacac;
+		filter: brightness(1.5);
 	}
 `;
 
@@ -303,6 +333,11 @@ const User = styled.div`
 
 	span {
 		margin: 0 0 0 12px;
+
+		em {
+			font-size: 14px;
+			color: #acacac;
+		}
 	}
 
 	&:hover {

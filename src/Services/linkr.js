@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://linkrr-project.herokuapp.com";
+const API_URL = "http://localhost:4000";
+//"https://linkrr-project.herokuapp.com";
 
 function createHeaders() {
 	const token = JSON.parse(localStorage.getItem("linkr"))?.token;
@@ -85,6 +86,14 @@ function listPostsWithHashtag(hashtag, page) {
 	return promise;
 }
 
+function listUsers(search) {
+	const config = createHeaders();
+
+	const promise = axios.get(`${API_URL}/users/?search=${search}`, config);
+
+	return promise;
+}
+
 function listPostsFromUser(id, page) {
 	const config = createHeaders();
 
@@ -155,6 +164,7 @@ export {
 	listPosts,
 	deletePost,
 	editPost,
+	listUsers,
 	listHashtags,
 	listPostsWithHashtag,
 	listPostsFromUser,
