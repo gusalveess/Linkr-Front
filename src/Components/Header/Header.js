@@ -75,7 +75,7 @@ export default function Header() {
 	return (
 		<>
 			<Top>
-				<h1>linkr</h1>
+				<Link to="/timeline">linkr</Link>
 
 				<Search>
 					<SearchBar>
@@ -158,7 +158,7 @@ const Top = styled.div`
 	height: 72px;
 	background-color: #151515;
 
-	h1 {
+	& > a {
 		font-family: "Passion One", cursive;
 		font-weight: 700;
 		color: #fff;
@@ -166,7 +166,7 @@ const Top = styled.div`
 	}
 
 	@media(max-width: 611px) {
-		h1 {
+		& > a {
 			font-size: 45px;
 		}
 	}
