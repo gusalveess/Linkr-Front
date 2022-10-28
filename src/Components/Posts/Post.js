@@ -202,7 +202,7 @@ export default function Post({ post, update, setUpdate }) {
 	}
 
 	function onKeyPress(event) {
-		if (event.key === "Esc") {
+		if (event.key === "Escape") {
 			setDisabled(true);
 		} else if (event.key === "Enter") {
 			editPost();
@@ -415,7 +415,7 @@ const User = styled.div`
 	margin: 0 10px 0 0;
 
 	h3 {
-		margin-top: 10px;
+		margin-top: 20px;
 		text-align: center;
 
 		svg {
@@ -455,6 +455,17 @@ const PostData = styled.div`
 		width: 100%;
 		height: auto;
 		overflow: hidden;
+
+		a {
+			width: 100%;
+		}
+
+		h2 {
+			width: 100%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
 		textarea {
 			width: 100%;
@@ -522,25 +533,28 @@ const Snippet = styled.div`
 	&& {
 		&& {
 			width: 100%;
-			height: 155px;
+			height: 140px;
 			display: flex;
 			cursor: pointer;
 			align-items: flex-start;
+			border-radius: 11px;
+			border: 1px solid #4d4d4d;
 
 			div {
 				width: 100%;
 				height: 100%;
-				border-radius: 11px 0 0 11px;
 				display: flex;
 				flex-direction: column;
 				align-items: flex-start;
 
 				h2 {
+					height: auto;
 					font-size: 16px;
 					color: #cecece;
 				}
 
 				p {
+					margin: 5px 0 0;
 					font-size: 11px;
 					color: #9b9595;
 				}
@@ -550,37 +564,38 @@ const Snippet = styled.div`
 					font-size: 11px;
 					color: #cecece;
 					margin: 0;
+					width: 80%;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 			}
 
 			img {
 				width: 153px;
-				height: 155px;
+				height: 100%;
 				object-fit: fill;
 				border-radius: 0 11px 11px 0;
-				border: 1px solid #4d4d4d;
+				border-left: 1px solid #4d4d4d;
 			}
 
 			& > div {
-				border: 1px solid #4d4d4d;
-				border-right-width: 0;
 				padding: 20px;
 				justify-content: space-between;
 			}
 
 			@media (max-width: 611px) {
 				width: 100%;
-				height: auto;
 
 				img {
 					width: 95px;
-					height: 115px;
+					height: 100%;
 					object-fit: contain;
 				}
 
 				& > div {
-					width: 100%;
-					height: 115px;
+					width: 60%;
+					height: 100%;
 					padding: 10px;
 
 					div {
@@ -594,7 +609,7 @@ const Snippet = styled.div`
 				}
 
 				p {
-					margin-bottom: 5px;
+					margin: 5px 0;
 					max-height: 45px;
 					overflow: hidden;
 				}
@@ -603,6 +618,22 @@ const Snippet = styled.div`
 				p {
 					font-size: 9px;
 					align-self: flex-start;
+				}
+			}
+
+			@media (max-width: 380px) {
+				& > div {
+					width: 70%;
+				}
+			}
+
+			@media (max-width: 340px) {
+				img {
+					display: none;
+				}
+
+				& > div {
+					width: 100%;
 				}
 			}
 		}

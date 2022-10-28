@@ -75,7 +75,7 @@ export default function Header() {
 	return (
 		<>
 			<Top>
-				<h1>Linkr</h1>
+				<h1>linkr</h1>
 
 				<Search>
 					<SearchBar>
@@ -94,7 +94,7 @@ export default function Header() {
 						{isLoading ? (
 							<LoadingSpinner />
 						) : users.length === 0 ? (
-							<span>"Nenhum usuário encontrado"</span>
+							<span>Nenhum usuário encontrado</span>
 						) : (
 							users.map(({ username, picture, userId, followedByUser }, index) => (
 								<User key={index} onClick={() => seeUser(userId)}>
@@ -152,7 +152,7 @@ const Top = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-left: 20px;
+	padding: 0 0 0 20px;
 
 	width: 100%;
 	height: 72px;
@@ -164,15 +164,19 @@ const Top = styled.div`
 		color: #fff;
 		font-size: 49px;
 	}
+
+	@media(max-width: 611px) {
+		h1 {
+			font-size: 45px;
+		}
+	}
 `;
 
 const ScreenUser = styled.div`
 	display: flex;
 	height: 50px;
-	right: 20px;
-	bottom: 20px;
-	position: relative;
 	align-items: center;
+	margin: 0 20px 0 0;
 
 	img {
 		margin-left: 10px;
@@ -186,11 +190,23 @@ const ScreenUser = styled.div`
 	svg {
 		cursor: pointer;
 	}
+
+	@media(max-width: 611px) {
+		img {
+			width: 40px;
+			height: 40px;
+		}
+
+		svg {
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+		}
+	}
 `;
 
 const Container = styled.div`
 	display: inline;
-	margin-top: 50px;
 	position: relative;
 
 	h1 {
@@ -217,7 +233,7 @@ const Logout = styled.div`
 	display: flex;
 	justify-content: center;
 	position: absolute;
-	top: 36px;
+	top: 50px;
 	z-index: 6;
 
 	width: 100%;
@@ -229,8 +245,15 @@ const Logout = styled.div`
 `;
 
 const Search = styled.div`
-	width: 35%;
+	width: 50%;
+	max-width: 563px;
 	height: 45px;
+
+	@media(max-width: 611px) {
+		margin: 140px auto 0;
+		width: 90%;
+		position: absolute;
+	}
 `;
 
 const SearchBar = styled.div`

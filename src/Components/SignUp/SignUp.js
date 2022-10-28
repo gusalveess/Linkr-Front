@@ -208,6 +208,7 @@ const MainTwo = styled.div`
 		border-radius: 6px;
 		padding-left: 17px;
 		font-size: 23px;
+   		-webkit-box-shadow: 0 0 0 50px #ffffff inset;
 	}
 
 	input::placeholder {

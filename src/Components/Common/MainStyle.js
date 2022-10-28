@@ -33,7 +33,6 @@ const Main = styled.main`
 
 	@media (max-width: 611px) {
 		width: 100%;
-		align-items: center;
 
 		& > div > section {
 			width: 100%;
@@ -43,6 +42,11 @@ const Main = styled.main`
 			width: 100%;
 			display: flex;
 			flex-direction: row;
+		}
+
+		& > h1 {
+			font-size: 33px;
+			margin: 10px 17px 30px;
 		}
 	}
 `;

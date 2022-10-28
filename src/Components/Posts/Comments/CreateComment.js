@@ -112,4 +112,11 @@ const Wrapper = styled.div`
 		font-size: 14px;
 		color: #575757;
 	}
+
+	@media (max-width: 380px) {
+		img {
+			width: 32px;
+			height: 32px;
+		}
+	}
 `;

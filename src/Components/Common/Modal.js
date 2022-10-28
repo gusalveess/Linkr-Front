@@ -53,7 +53,7 @@ const Wrapper = styled(ReactModal)`
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-evenly;
-		padding: 30px 0;
+		padding: 40px;
 		background-color: #333333;
 		font-family: "Lato", sans-serif;
 		color: #ffffff;
@@ -70,6 +70,12 @@ const Wrapper = styled(ReactModal)`
 
 	svg {
 		margin: 50px auto;
+	}
+
+	@media (max-width: 460px) {
+		h1 {
+			font-size: 22px;
+		}
 	}
 `;
 
@@ -96,6 +102,24 @@ const Buttons = styled.div`
 
 	button:hover {
 		filter: brightness(0.9);
+	}
+
+	@media (max-width: 460px) {
+		button {
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 380px) {
+		button {
+			height: 50px;
+		}
+	}
+
+	@media (max-width: 330px) {
+		button {
+			height: 70px;
+		}
 	}
 `;
 

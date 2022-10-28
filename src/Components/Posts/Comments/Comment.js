@@ -68,5 +68,12 @@ const Wrapper = styled.div`
 			color: #acacac;
 			margin: 5px 0 0 0;
 		}
+
+		@media (max-width: 380px) {
+			img {
+				width: 30px;
+				height: 30px;
+			}
+		}
 	}
 `;

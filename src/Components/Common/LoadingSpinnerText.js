@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 		flex-direction: column;
 		align-items: center;
 		color: #6d6d6d;
-		margin: 80px auto 0;
+		margin: 80px auto;
 
 		span {
 			width: fit-content;
