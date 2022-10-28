@@ -8,7 +8,7 @@ import LoadingSpinner from "../../Common/LoadingSpinner";
 import CreateComment from "./CreateComment";
 import Comment from "./Comment";
 
-export default function CommentsSection({ postId }) {
+export default function CommentsSection({ postId, updatePost, setUpdatePost }) {
 	const [update, setUpdate] = useState(true);
 	const [comments, setComments] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +63,7 @@ export default function CommentsSection({ postId }) {
 				</Comments>
 			)}
 
-			<CreateComment postId={postId} setUpdate={setUpdate} update={update} />
+			<CreateComment postId={postId} setUpdate={setUpdate} update={update} setUpdatePost={setUpdatePost} updatePost={updatePost} />
 		</Wrapper>
 	);
 }
