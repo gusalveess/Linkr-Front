@@ -21,19 +21,22 @@ import Modal from "../Common/Modal";
 import CommentsSection from "./Comments/CommentsSection";
 
 function getLikedBy(post) {
+
+	let otherPeople = Math.abs(Number(post.likesTotal) - 2);
+
 	if (post.likedByUser && post.likedBy.length === 0) {
 		return "Você";
 	} else if (post.likedByUser && post.likedBy.length === 1) {
-		return `Você e ${post.likedBy}`;
+		return `Você e ${post.likedBy[0].username}`;
 	} else if (post.likedByUser) {
-		return `Você, ${post.likedBy[0]} e outras ${post.length - 2} pessoas`;
+		return `Você, ${post.likedBy[0].username} e outras ${otherPeople} pessoas`;
 	} else if (post.likedBy.length === 0) {
 		return `ninguém ainda, que tal ser o primeiro?`;
 	} else if (post.likedBy.length === 1) {
-		return `${post.likedBy[0]}`;
+		return `${post.likedBy[0].username}`;
 	}
-	return `${post.likedBy[0]}, ${post.likedBy[1]} e outras ${
-		post.length - 2
+	return `${post.likedBy[0].username}, ${post.likedBy[1].username} e outras ${
+		otherPeople
 	} pessoas`;
 }
 
@@ -334,7 +337,7 @@ export default function Post({ post, update, setUpdate }) {
 				</PostData>
 			</PostWrapper>
 
-			{seeComments ? <CommentsSection postId={post.id} /> : ""}
+			{seeComments ? <CommentsSection postId={post.id} updatePost={update} setUpdatePost={setUpdate} /> : ""}
 
 			<Modal
 				modalIsOpen={modalIsOpen}

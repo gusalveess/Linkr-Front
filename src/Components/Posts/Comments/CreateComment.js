@@ -5,7 +5,7 @@ import { TbSend as SendIcon } from "react-icons/tb";
 import { useMessage } from "../../../Contexts/messageContext";
 import * as service from "../../../Services/linkr";
 
-export default function CreateComment({ postId, setUpdate, update }) {
+export default function CreateComment({ postId, setUpdate, update, updatePost, setUpdatePost }) {
 	const [newComment, setNewComment] = useState("");
 	const [disabled, setDisabled] = useState(false);
 	const { setMessage } = useMessage();
@@ -37,6 +37,7 @@ export default function CreateComment({ postId, setUpdate, update }) {
 			setNewComment("");
 			setDisabled(false);
 			setUpdate(!update);
+			setUpdatePost(!updatePost);
 		});
 	}
 
