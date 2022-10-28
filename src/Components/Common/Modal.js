@@ -17,7 +17,7 @@ export default function Modal({
 		<Wrapper
 			isOpen={modalIsOpen}
 			onRequestClose={() => setModalIsOpen(false)}
-			style={{ overlay: { zIndex: 5 } }}
+			style={{ overlay: { zIndex: 15 } }}
 		>
 			{isLoading ? (
 				<Loading color="#FFFFFF" height={13} width={51} />
